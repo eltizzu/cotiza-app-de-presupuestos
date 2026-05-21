@@ -76,6 +76,8 @@
 
 - [x] Documento comercial actualizado con funciones reales de la demo.
 - [x] Manual de uso actualizado.
+- [x] Manual de uso reescrito como guia paso a paso.
+- [x] Tutorial de primer presupuesto incluido.
 - [x] Resumen legal/fiscal actualizado para demo local.
 - [x] Documento de web legal actualizado para almacenamiento local y backup.
 - [x] Decisiones de producto actualizadas.

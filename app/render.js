@@ -1,3 +1,4 @@
+(function () {
 const { escapeHtml, money, quoteStatuses, state, variableLabels } = window.Cotiza;
 
 function showSection(id) {
@@ -316,3 +317,4 @@ window.CotizaRender = {
   renderTotals,
   showSection,
 };
+})();

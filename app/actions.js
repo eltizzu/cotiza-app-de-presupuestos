@@ -1,3 +1,4 @@
+(function () {
 const { getPrice, getRule, quoteStatuses, saveState, state } = window.Cotiza;
 const render = window.CotizaRender;
 let toastTimer;
@@ -454,3 +455,4 @@ function init() {
 }
 
 init();
+})();

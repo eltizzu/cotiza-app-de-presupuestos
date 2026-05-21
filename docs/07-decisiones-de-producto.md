@@ -145,6 +145,39 @@ Decision de cierre:
 - La V1 demo ya representa de forma coherente la propuesta de Cotiza.
 - Los siguientes avances deberian ser pulido visual, prueba manual en navegador y decision tecnica sobre si evolucionar a SaaS, app local o app de escritorio.
 
+## 2026-05-21 - Correccion de carga de scripts
+
+Problema detectado:
+
+- Al separar JavaScript en varios archivos y cargarlos como scripts clasicos, algunos nombres internos chocaban en el ambito global del navegador.
+- Eso podia impedir que `actions.js` llegara a vincular eventos, dejando los botones sin respuesta.
+
+Correccion:
+
+- `state.js`, `render.js` y `actions.js` quedaron envueltos en bloques aislados.
+- Solo se exponen `window.Cotiza` y `window.CotizaRender` como puntos compartidos.
+
+Decision tecnica:
+
+- Mientras la demo siga sin bundler ni modulos, los archivos JavaScript deben evitar declarar nombres globales accidentales.
+
+## 2026-05-21 - Manual de uso completo
+
+Se reescribio el manual de uso como guia practica:
+
+- Explicacion del concepto base.
+- Recorrido por cada seccion de la app.
+- Ejemplos de precios y rendimientos.
+- Explicacion de trabajos tipo.
+- Uso del presupuesto, historial, backup e impresion.
+- Tutorial completo para crear un primer presupuesto de pintura.
+- Buenas practicas y limites de la demo.
+
+Decision de producto:
+
+- El manual debe explicar la logica de Cotiza sin asumir conocimiento tecnico.
+- Los ejemplos deben mostrar datos reales de oficio, no texto generico.
+
 ## 2026-05-15 - Separacion inicial de JavaScript
 
 Se separo la primera parte de la estructura tecnica:

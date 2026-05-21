@@ -1,3 +1,4 @@
+(function () {
 const initialState = {
   settings: {
     businessName: "Reformas Norte",
@@ -191,3 +192,4 @@ window.Cotiza = {
   state,
   variableLabels,
 };
+})();
