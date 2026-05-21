@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Uso — Cotiza</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0f766e;
+    --primary-light: #14998f;
+    --primary-ultra: #e6f4f3;
+    --bg: #f6f3ee;
+    --text: #1a2e2b;
+    --text-muted: #527570;
+    --border: #cce3e0;
+    --card: #ffffff;
+    --code-bg: #eaf4f3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  .header {
+    background: var(--primary);
+    color: white;
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(15,118,110,0.3);
+  }
+  .header-left { display: flex; align-items: center; gap: 1rem; }
+  .header-logo { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.25rem; }
+  .header-subtitle { font-size: 0.875rem; opacity: 0.8; }
+  .back-btn {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: background 0.2s;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.25); }
+
+  .layout { display: flex; min-height: calc(100vh - 64px); }
+
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+  }
+  .sidebar-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    padding: 0 1.25rem 0.75rem;
+    font-weight: 600;
+  }
+  .sidebar a {
+    display: block;
+    padding: 0.45rem 1.25rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  .sidebar a:hover { color: var(--primary); background: var(--primary-ultra); border-left-color: var(--primary); }
+
+  .main { flex: 1; padding: 3rem 4rem; max-width: 860px; }
+
+  .doc-hero {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin-bottom: 3rem;
+  }
+  .doc-hero h1 { font-family: 'Sora', sans-serif; font-size: 2rem; margin-bottom: 0.5rem; }
+  .doc-hero p { opacity: 0.85; font-size: 1rem; }
+  .doc-meta { display: flex; gap: 1.5rem; margin-top: 1.25rem; font-size: 0.8rem; opacity: 0.75; }
+
+  .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+  .section h2 {
+    font-family: 'Sora', sans-serif;
+    font-size: 1.4rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border);
+  }
+  .section h3 { font-size: 1.05rem; font-weight: 600; margin: 1.5rem 0 0.5rem; }
+  .section p { margin-bottom: 0.75rem; color: #374747; }
+  .section ul, .section ol { padding-left: 1.5rem; margin-bottom: 1rem; color: #374747; }
+  .section li { margin-bottom: 0.3rem; }
+
+  .steps { counter-reset: step; list-style: none; padding: 0; margin: 1rem 0; }
+  .steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .steps li:last-child { border-bottom: none; }
+  .steps li::before {
+    content: counter(step);
+    background: var(--primary);
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1rem 0; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; }
+  .card h4 { font-size: 0.9rem; font-weight: 600; color: var(--primary); margin-bottom: 0.5rem; }
+  .card ul { font-size: 0.85rem; padding-left: 1.25rem; color: var(--text-muted); }
+  .card li { margin-bottom: 0.2rem; }
+
+  code {
+    background: var(--code-bg);
+    color: var(--primary);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875em;
+    border: 1px solid var(--border);
+  }
+
+  .info-box {
+    background: var(--primary-ultra);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+
+  .table-example {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+    background: var(--card);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .table-example th {
+    background: var(--primary);
+    color: white;
+    padding: 0.6rem 1rem;
+    text-align: left;
+    font-weight: 600;
+  }
+  .table-example td {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: #374747;
+  }
+  .table-example tr:last-child td { border-bottom: none; }
+  .table-example tr:nth-child(even) { background: var(--bg); }
+
+  .flow-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+  .flow-box .quote {
+    font-size: 1.05rem;
+    font-style: italic;
+    color: var(--primary);
+    border-left: 3px solid var(--primary);
+    padding-left: 1rem;
+    margin: 0.5rem 0;
+  }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <span class="header-logo">Cotiza</span>
+    <span class="header-subtitle">Manual de uso</span>
+  </div>
+  <a href="index.html" class="back-btn">← Volver a la landing</a>
+</header>
+
+<div class="layout">
+
+  <nav class="sidebar">
+    <div class="sidebar-title">Contenido</div>
+    <a href="#que-es">¿Qué es Cotiza?</a>
+    <a href="#estructura">Estructura de la app</a>
+    <a href="#inicio">1. Inicio</a>
+    <a href="#precios">2. Precios</a>
+    <a href="#rendimientos">3. Rendimientos</a>
+    <a href="#trabajos">4. Trabajos tipo</a>
+    <a href="#presupuesto">5. Presupuesto</a>
+    <a href="#guardar">6. Guardar y seguir</a>
+    <a href="#pdf">7. Imprimir / PDF</a>
+    <a href="#tutorial">Tutorial completo</a>
+    <a href="#buenas-practicas">Buenas prácticas</a>
+    <a href="#limites">Límites de la demo</a>
+  </nav>
+
+  <main class="main">
+
+    <div class="doc-hero">
+      <h1>Manual de Uso — Cotiza</h1>
+      <p>Presupuestos de reformas y trabajos técnicos a partir de tus propios datos de precios y rendimientos.</p>
+      <div class="doc-meta">
+        <span>📅 Última actualización: 21 de mayo 2026</span>
+        <span>🔧 Para autónomos y pymes</span>
+      </div>
+    </div>
+
+    <!-- Qué es -->
+    <section class="section" id="que-es">
+      <h2>¿Qué es Cotiza?</h2>
+      <div class="flow-box">
+        <p>Cotiza es una herramienta para crear presupuestos de reformas, oficios y trabajos técnicos a partir de datos controlados por el usuario.</p>
+        <p class="quote">Precios + Rendimientos + Trabajos tipo = Presupuesto base editable</p>
+        <p>Cotiza no inventa precios ni decide por ti. Calcula una base usando tu información y te deja revisar, editar y cerrar el presupuesto.</p>
+      </div>
+    </section>
+
+    <!-- Estructura -->
+    <section class="section" id="estructura">
+      <h2>Estructura de la app</h2>
+      <p>La demo tiene cinco secciones principales que conviene usar en orden la primera vez:</p>
+      <div class="card-grid">
+        <div class="card"><h4>1. Inicio</h4><ul><li>Datos del negocio</li><li>Moneda e impuesto</li><li>Backup local</li></ul></div>
+        <div class="card"><h4>2. Precios</h4><ul><li>Base de costes</li><li>Material, mano obra...</li></ul></div>
+        <div class="card"><h4>3. Rendimientos</h4><ul><li>Reglas de estimación</li><li>Horas/m², litros/m²...</li></ul></div>
+        <div class="card"><h4>4. Trabajos tipo</h4><ul><li>Plantillas reutilizables</li><li>Combinan precios+rendimientos</li></ul></div>
+        <div class="card"><h4>5. Presupuesto</h4><ul><li>Documento editable</li><li>PDF para el cliente</li></ul></div>
+      </div>
+    </section>
+
+    <!-- Inicio -->
+    <section class="section" id="inicio">
+      <h2>1. Inicio</h2>
+      <p>En "Inicio" se cargan los datos generales del negocio que aparecerán en los presupuestos.</p>
+      <ul>
+        <li><strong>Nombre del negocio</strong> — ej: Reformas Norte</li>
+        <li><strong>Moneda</strong> — ej: EUR</li>
+        <li><strong>Impuesto por defecto</strong> — ej: 21%</li>
+        <li><strong>Margen por defecto</strong> — ej: 20% (no se muestra al cliente)</li>
+      </ul>
+      <div class="info-box">El margen se usa para calcular el precio antes de impuestos. La impresión para el cliente no muestra el margen interno.</div>
+
+      <h3>Backup local</h3>
+      <p>Desde "Inicio" también puedes exportar e importar un backup en formato JSON con todos los datos de Cotiza.</p>
+      <div class="info-box">⚠️ La demo guarda datos en el navegador. Si se borra el almacenamiento, se pueden perder datos. Exporta backup si cargas datos importantes.</div>
+    </section>
+
+    <!-- Precios -->
+    <section class="section" id="precios">
+      <h2>2. Precios</h2>
+      <p>En "Precios" se carga la base de costes: material, mano de obra, transporte, alquiler u otro concepto.</p>
+
+      <table class="table-example">
+        <tr><th>Concepto</th><th>Tipo</th><th>Unidad</th><th>Precio</th></tr>
+        <tr><td>Pintura plástica interior</td><td>Material</td><td>litro</td><td>8,50 €</td></tr>
+        <tr><td>Material auxiliar pintura</td><td>Material</td><td>m²</td><td>0,65 €</td></tr>
+        <tr><td>Hora oficial</td><td>Mano de obra</td><td>hora</td><td>28 €</td></tr>
+        <tr><td>Desplazamiento urbano</td><td>Transporte</td><td>unidad</td><td>25 €</td></tr>
+      </table>
+
+      <div class="info-box">No hace falta cargar todo al principio. Empieza con los precios necesarios para los trabajos más frecuentes.</div>
+    </section>
+
+    <!-- Rendimientos -->
+    <section class="section" id="rendimientos">
+      <h2>3. Rendimientos</h2>
+      <p>Los rendimientos son reglas para estimar cantidades o tiempos: cuántas horas lleva una tarea, cuánto material se consume por m², etc.</p>
+
+      <table class="table-example">
+        <tr><th>Nombre</th><th>Variable</th><th>Resultado/unidad</th><th>Unidad</th></tr>
+        <tr><td>Litros pintura por m²</td><td>m²</td><td>0,125</td><td>litros</td></tr>
+        <tr><td>Horas pintura por m²</td><td>m²</td><td>0,18</td><td>horas</td></tr>
+        <tr><td>Horas cambio de grifo</td><td>cantidad</td><td>1,2</td><td>horas</td></tr>
+        <tr><td>Horas colocar suelo por m²</td><td>m²</td><td>0,35</td><td>horas</td></tr>
+      </table>
+
+      <div class="info-box"><strong>Ejemplo:</strong> Si "Horas pintura por m²" vale 0,18 y el trabajo tiene 25 m², Cotiza estima: 25 × 0,18 = 4,5 horas.</div>
+
+      <p>Variables disponibles: <code>m²</code> · <code>cantidad</code> · <code>metros lineales</code></p>
+    </section>
+
+    <!-- Trabajos tipo -->
+    <section class="section" id="trabajos">
+      <h2>4. Trabajos tipo</h2>
+      <p>Un trabajo tipo es una plantilla reutilizable que combina precios y rendimientos. Ejemplos: Pintar habitación, Cambiar grifo, Colocar suelo laminado.</p>
+
+      <h3>Crear un trabajo tipo</h3>
+      <ol class="steps">
+        <li>Ir a Trabajos tipo</li>
+        <li>Escribir nombre y descripción breve</li>
+        <li>Agregar partidas (cada una necesita: precio, tipo de cálculo, rendimiento/variable y multiplicador)</li>
+        <li>Guardar el trabajo tipo</li>
+      </ol>
+
+      <h3>Tipos de cálculo de partidas</h3>
+      <div class="card-grid">
+        <div class="card">
+          <h4>Usar rendimiento</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Cuando ya existe una regla cargada en Rendimientos.</p>
+          <p style="font-size:0.85rem;">Ej: Precio → Hora oficial / Rendimiento → Horas pintura por m²</p>
+        </div>
+        <div class="card">
+          <h4>Cantidad directa</h4>
+          <p style="font-size:0.85rem; color:var(--text-muted);">Cuando la partida depende directamente de m², cantidad o metros lineales.</p>
+          <p style="font-size:0.85rem;">Ej: Suelo laminado × m² × 1,08 (merma)</p>
+        </div>
+      </div>
+
+      <div class="info-box">Cada trabajo tipo se puede <strong>duplicar</strong> para crear variantes sin empezar de cero. Ej: Pintar habitación → Pintar piso completo → Pintar local.</div>
+    </section>
+
+    <!-- Presupuesto -->
+    <section class="section" id="presupuesto">
+      <h2>5. Presupuesto</h2>
+      <p>En "Presupuesto" se crea el documento editable para el cliente.</p>
+
+      <h3>Datos del presupuesto</h3>
+      <ul>
+        <li>Número (se propone automáticamente)</li>
+        <li>Cliente y dirección/obra</li>
+        <li>Validez y fecha</li>
+        <li>Estado: <code>Borrador</code> · <code>Enviado</code> · <code>Aceptado</code> · <code>Rechazado</code></li>
+      </ul>
+
+      <h3>Calcular base</h3>
+      <ol class="steps">
+        <li>Elegir un trabajo tipo</li>
+        <li>Cargar m², cantidad o metros lineales según corresponda</li>
+        <li>Pulsar <code>Calcular base</code></li>
+      </ol>
+      <div class="info-box">Cotiza genera partidas usando los precios y rendimientos cargados. El resultado es una base, no un presupuesto cerrado automáticamente.</div>
+
+      <h3>Editar y ajustar partidas</h3>
+      <p>Después de calcular, cada línea se puede editar, reordenar, quitar, o ajustar en cantidad y precio unitario. También se pueden agregar líneas manuales extra (retirada de escombros, protección, reparación previa, etc.).</p>
+    </section>
+
+    <!-- Guardar -->
+    <section class="section" id="guardar">
+      <h2>6. Guardar y seguir presupuestos</h2>
+      <p>El botón "Guardar presupuesto" guarda en el historial local. Desde "Presupuestos guardados" puedes abrir, cambiar estado, eliminar o buscar por número, cliente o dirección.</p>
+      <p>El resumen comercial muestra: borradores, enviados, aceptados y rechazados con sus totales.</p>
+      <div class="info-box">El historial es local de la demo. No es una base de datos en la nube.</div>
+    </section>
+
+    <!-- PDF -->
+    <section class="section" id="pdf">
+      <h2>7. Imprimir / Guardar PDF</h2>
+      <p>El botón "Imprimir / Guardar PDF" abre la impresión del navegador. El documento para el cliente incluye: datos del negocio, datos del cliente, fecha, partidas, subtotal, impuesto y total. No incluye coste ni margen interno.</p>
+      <div class="info-box">Revisa siempre el presupuesto antes de imprimirlo: cliente, número, fecha, validez, partidas, cantidades, precios y total.</div>
+    </section>
+
+    <!-- Tutorial -->
+    <section class="section" id="tutorial">
+      <h2>Tutorial: primer presupuesto de pintura</h2>
+      <p>Ejemplo completo para entender el flujo de principio a fin.</p>
+
+      <h3>Paso 1 — Configuración</h3>
+      <p>Ir a "Inicio": cargar nombre, EUR, impuesto 21%, margen 20%. Guardar configuración.</p>
+
+      <h3>Paso 2 — Verificar precios</h3>
+      <p>Ir a "Precios": asegurarse de tener Pintura plástica interior, Material auxiliar pintura, Hora oficial y Desplazamiento urbano.</p>
+
+      <h3>Paso 3 — Verificar rendimientos</h3>
+      <p>Ir a "Rendimientos": comprobar que existen Litros pintura por m², Horas pintura por m² y Desplazamiento por trabajo.</p>
+
+      <h3>Paso 4 — Calcular base</h3>
+      <ol class="steps">
+        <li>Ir a "Presupuesto"</li>
+        <li>Elegir trabajo tipo: Pintar habitación</li>
+        <li>Superficie m²: 25</li>
+        <li>Pulsar <code>Calcular base</code></li>
+      </ol>
+
+      <h3>Paso 5 — Ajustar</h3>
+      <p>Revisar cantidades, precio unitario y totales. Agregar línea extra si hace falta (ej: Reparación pequeña de pared, 1 unidad, 35€).</p>
+
+      <h3>Paso 6 — Guardar</h3>
+      <p>Cargar cliente, dirección/obra, fecha, validez y estado Borrador. Pulsar "Guardar presupuesto".</p>
+
+      <h3>Pasos 7 y 8 — Estado y PDF</h3>
+      <p>Cuando se envía al cliente: cambiar a Enviado. Si acepta: Aceptado. Luego imprimir o guardar PDF.</p>
+    </section>
+
+    <!-- Buenas prácticas -->
+    <section class="section" id="buenas-practicas">
+      <h2>Buenas prácticas</h2>
+      <ul>
+        <li>Revisar siempre el presupuesto antes de enviarlo</li>
+        <li>Mantener los precios actualizados</li>
+        <li>Ajustar los rendimientos según experiencia real</li>
+        <li>Usar trabajos tipo como base, no como verdad absoluta</li>
+        <li>Exportar backup si cargas datos importantes</li>
+        <li>No usar la demo como sistema fiscal, contable o legal</li>
+      </ul>
+    </section>
+
+    <!-- Límites -->
+    <section class="section" id="limites">
+      <h2>Límites de la demo</h2>
+      <ul>
+        <li>Los datos se guardan en el navegador (no en la nube)</li>
+        <li>No hay usuarios ni contraseñas</li>
+        <li>No hay facturación ni contabilidad</li>
+        <li>No hay control de obra ni importador de Excel todavía</li>
+      </ul>
+      <div class="info-box">La demo sirve para validar el flujo central de Cotiza: cargar tus datos, calcular una base editable y generar un presupuesto ordenado.</div>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>
