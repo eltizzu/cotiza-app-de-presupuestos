@@ -35,6 +35,10 @@ Texto para demo local:
 
 > Esta demo guarda la informacion en el navegador. Si borras los datos del navegador o cambias de dispositivo, puedes perder la informacion salvo que exportes un backup.
 
+Texto para demo publica:
+
+> Esta es una demo publica. No cargues informacion sensible o datos reales que no quieras guardar en este navegador.
+
 Texto sobre backups:
 
 > Los archivos de backup pueden contener informacion comercial y datos de clientes. Guarda esos archivos de forma segura.

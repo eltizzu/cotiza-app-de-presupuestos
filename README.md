@@ -45,6 +45,9 @@ Incluye:
 - Resumen comercial simple por estado.
 - Reordenar y quitar lineas del presupuesto.
 - Exportacion e importacion de backup local en JSON.
+- Aviso visible de demo publica.
+- Boton para restaurar la demo a datos iniciales.
+- Ajustes responsive para uso en movil.
 - Totales con margen e impuesto.
 - Vista imprimible para guardar como PDF desde el navegador.
 

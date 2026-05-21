@@ -31,6 +31,7 @@
 - [x] Separacion de acciones en `actions.js`.
 - [x] Exportacion de backup local JSON.
 - [x] Importacion de backup local JSON.
+- [x] Exportacion de backup sin estado temporal de filtros/edicion.
 - [x] Confirmacion antes de importar backup.
 - [x] Confirmaciones visuales para acciones principales.
 - [x] Confirmacion antes de eliminar presupuestos guardados.
@@ -40,6 +41,10 @@
 - [x] Demo inicial con notas visibles para cliente.
 - [x] Vista imprimible desde el navegador con datos de cliente.
 - [x] Condiciones comerciales basicas en impresion.
+- [x] Aviso visible de demo publica.
+- [x] Texto legal minimo visible dentro de la demo.
+- [x] Boton para restaurar datos iniciales de demo.
+- [x] Ajustes responsive para pantallas moviles.
 - [x] Persistencia local de la demo en el navegador.
 - [x] Documentacion viva actualizada con la primera demo.
 
@@ -53,6 +58,7 @@
 - [ ] Mejor gestion visual de partidas dentro de trabajos tipo.
 - [ ] Confirmacion visual mas detallada para eliminaciones.
 - [ ] Mostrar historial de cambios de estado.
+- [ ] Prueba visual real en movil antes de publicacion final.
 
 ## Revision de flujo V1 demo
 

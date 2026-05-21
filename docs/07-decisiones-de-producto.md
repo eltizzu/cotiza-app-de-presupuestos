@@ -178,6 +178,22 @@ Decision de producto:
 - El manual debe explicar la logica de Cotiza sin asumir conocimiento tecnico.
 - Los ejemplos deben mostrar datos reales de oficio, no texto generico.
 
+## 2026-05-21 - Preparacion para demo publica
+
+Se agrego:
+
+- Aviso visible de demo publica.
+- Texto legal minimo dentro de la app.
+- Boton "Restaurar demo" para volver a datos iniciales.
+- Exportacion de backup sin estado temporal de filtros o edicion.
+- Ajustes responsive adicionales para pantallas moviles.
+
+Decision de producto:
+
+- La demo publica debe advertir que los datos se guardan localmente en el navegador.
+- La demo publica debe facilitar volver a los ejemplos iniciales.
+- Antes de publicarla definitivamente conviene hacer una prueba visual real en movil y escritorio.
+
 ## 2026-05-15 - Separacion inicial de JavaScript
 
 Se separo la primera parte de la estructura tecnica:

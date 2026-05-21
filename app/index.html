@@ -8,6 +8,10 @@
   </head>
   <body>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <section class="demo-notice" aria-label="Aviso de demo">
+      <strong>Demo publica de Cotiza.</strong>
+      <span>No cargues datos sensibles. La informacion se guarda solo en este navegador y puede borrarse desde "Restaurar demo".</span>
+    </section>
     <header class="topbar">
       <div>
         <p class="eyebrow">Demo V1</p>
@@ -57,6 +61,7 @@
             <div>
               <p class="eyebrow">Backup local</p>
               <h2>Exportar o importar datos</h2>
+              <p class="panel-note">Los backups pueden incluir clientes, direcciones e importes. Guardalos con cuidado.</p>
             </div>
             <div class="action-row">
               <button class="secondary-action" id="exportBackup" type="button">Exportar backup</button>
@@ -64,7 +69,13 @@
                 Importar backup
                 <input id="importBackup" type="file" accept="application/json" />
               </label>
+              <button class="secondary-action danger-action" id="resetDemo" type="button">Restaurar demo</button>
             </div>
+          </div>
+          <div class="legal-note">
+            Cotiza es una demo de calculo y organizacion de presupuestos. Revisa siempre precios, cantidades,
+            impuestos, condiciones y alcance antes de usar o enviar un presupuesto. No sustituye asesoramiento
+            fiscal, legal ni tecnico.
           </div>
         </section>
 

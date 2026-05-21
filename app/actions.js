@@ -209,11 +209,17 @@ function updateHistoryFilters() {
 }
 
 function exportBackup() {
+  const backupState = {
+    ...state,
+    draftTemplateLines: [],
+    editingTemplateId: null,
+    historyFilters: { search: "", status: "all" },
+  };
   const backup = {
     product: "Cotiza",
     version: 1,
     exportedAt: new Date().toISOString(),
-    state,
+    state: backupState,
   };
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -250,6 +256,14 @@ function importBackup(file) {
   reader.readAsText(file);
 }
 
+function resetDemo() {
+  const confirmed = window.confirm("Restaurar la demo borrara los datos locales actuales y volvera a los ejemplos iniciales. ¿Quieres continuar?");
+  if (!confirmed) return;
+  localStorage.removeItem("cotiza-demo-state");
+  showToast("Demo restaurada. Recargando Cotiza...");
+  window.location.reload();
+}
+
 function bindEvents() {
   document.querySelectorAll(".nav-button").forEach((button) => {
     button.addEventListener("click", () => render.showSection(button.dataset.section));
@@ -273,6 +287,7 @@ function bindEvents() {
     importBackup(event.target.files[0]);
     event.target.value = "";
   });
+  document.getElementById("resetDemo").addEventListener("click", resetDemo);
 
   document.getElementById("priceForm").addEventListener("submit", (event) => {
     event.preventDefault();
