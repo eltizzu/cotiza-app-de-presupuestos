@@ -1,0 +1,18 @@
+<svg width="720" height="220" viewBox="0 0 720 220" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Cotiza</title>
+  <desc id="desc">Logo de Cotiza, herramienta para crear presupuestos de oficios y reformas.</desc>
+  <rect width="720" height="220" rx="24" fill="#ffffff"/>
+  <g transform="translate(56 42)">
+    <rect x="0" y="0" width="136" height="136" rx="28" fill="#eff6ff"/>
+    <path d="M38 36H98C104.627 36 110 41.3726 110 48V102C110 108.627 104.627 114 98 114H38C31.3726 114 26 108.627 26 102V48C26 41.3726 31.3726 36 38 36Z" fill="#ffffff" stroke="#1d4ed8" stroke-width="8"/>
+    <path d="M46 60H90" stroke="#1d4ed8" stroke-width="8" stroke-linecap="round"/>
+    <path d="M46 80H78" stroke="#78716c" stroke-width="8" stroke-linecap="round"/>
+    <path d="M46 100H66" stroke="#78716c" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="98" cy="104" r="20" fill="#ca8a04"/>
+    <path d="M89 104L96 111L108 96" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g transform="translate(224 64)">
+    <text x="0" y="74" fill="#1c1917" font-family="'DM Sans', Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="0">Cotiza</text>
+    <text x="4" y="112" fill="#78716c" font-family="'Inter', Arial, sans-serif" font-size="22" font-weight="500" letter-spacing="0">Presupuestos claros para oficios y reformas</text>
+  </g>
+</svg>

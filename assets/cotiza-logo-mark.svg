@@ -1,0 +1,11 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Cotiza icono</title>
+  <desc id="desc">Icono de Cotiza con documento de presupuesto y marca de aprobacion.</desc>
+  <rect width="256" height="256" rx="48" fill="#eff6ff"/>
+  <path d="M72 56H184C196.15 56 206 65.8497 206 78V178C206 190.15 196.15 200 184 200H72C59.8497 200 50 190.15 50 178V78C50 65.8497 59.8497 56 72 56Z" fill="#ffffff" stroke="#1d4ed8" stroke-width="14"/>
+  <path d="M88 100H166" stroke="#1d4ed8" stroke-width="14" stroke-linecap="round"/>
+  <path d="M88 132H146" stroke="#78716c" stroke-width="14" stroke-linecap="round"/>
+  <path d="M88 164H124" stroke="#78716c" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="184" cy="184" r="36" fill="#ca8a04"/>
+  <path d="M168 184L181 197L202 170" stroke="#ffffff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
