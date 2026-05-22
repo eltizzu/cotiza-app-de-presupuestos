@@ -26,7 +26,8 @@
     body { font-family: "Outfit", sans-serif; color: var(--text); background: linear-gradient(135deg, #f4f1ec 0%, #ece8e1 100%); min-height: 100vh; }
 
     nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; height: 64px; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
-    .nav-brand { font-family: "DM Sans", sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--accent-dark); text-decoration: none; }
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-family: "Outfit", sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--accent-dark); text-decoration: none; }
+    .nav-mark { width: 36px; height: 36px; border-radius: 9px; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; flex-shrink: 0; }
     .nav-brand span { color: var(--accent); }
     .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
@@ -131,7 +132,7 @@
 <body>
 
 <nav>
-  <a class="nav-brand" href="#"><span>Cotiza</span></a>
+  <a class="nav-brand" href="#"><div class="nav-mark">C</div><span>Cotiza</span></a>
   <div class="nav-links">
     <a href="#problema">Qué resuelve</a>
     <a href="#como">Cómo funciona</a>
