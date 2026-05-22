@@ -272,6 +272,10 @@ function bindEvents() {
   document.getElementById("saveSettings").addEventListener("click", () => {
     state.settings = {
       businessName: document.getElementById("inputBusinessName").value || "Mi negocio",
+      businessPhone: document.getElementById("inputBusinessPhone").value || "",
+      businessEmail: document.getElementById("inputBusinessEmail").value || "",
+      businessAddress: document.getElementById("inputBusinessAddress").value || "",
+      businessLogo: state.settings.businessLogo || "",
       currency: document.getElementById("inputCurrency").value || "EUR",
       tax: Number(document.getElementById("inputTax").value) || 0,
       margin: Number(document.getElementById("inputMargin").value) || 0,
@@ -280,6 +284,27 @@ function bindEvents() {
     render.renderBudget();
     saveState();
     showToast("Configuracion guardada.");
+  });
+
+  document.getElementById("inputBusinessLogo").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      state.settings.businessLogo = ev.target.result;
+      saveState();
+      render.renderSettings();
+      showToast("Logo guardado.");
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById("removeLogo").addEventListener("click", () => {
+    state.settings.businessLogo = "";
+    document.getElementById("inputBusinessLogo").value = "";
+    saveState();
+    render.renderSettings();
+    showToast("Logo eliminado.");
   });
 
   document.getElementById("exportBackup").addEventListener("click", exportBackup);

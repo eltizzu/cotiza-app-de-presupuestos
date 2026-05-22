@@ -2,6 +2,10 @@
 const initialState = {
   settings: {
     businessName: "Reformas Norte",
+    businessPhone: "",
+    businessEmail: "",
+    businessAddress: "",
+    businessLogo: "",
     currency: "EUR",
     tax: 21,
     margin: 20,

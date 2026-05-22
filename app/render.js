@@ -12,9 +12,23 @@ function renderSettings() {
   document.getElementById("businessName").textContent = state.settings.businessName;
   document.getElementById("defaultMargin").textContent = `Margen ${state.settings.margin}%`;
   document.getElementById("inputBusinessName").value = state.settings.businessName;
+  document.getElementById("inputBusinessPhone").value = state.settings.businessPhone || "";
+  document.getElementById("inputBusinessEmail").value = state.settings.businessEmail || "";
+  document.getElementById("inputBusinessAddress").value = state.settings.businessAddress || "";
   document.getElementById("inputCurrency").value = state.settings.currency;
   document.getElementById("inputTax").value = state.settings.tax;
   document.getElementById("inputMargin").value = state.settings.margin;
+
+  const logo = state.settings.businessLogo;
+  const previewWrap = document.getElementById("logoPreviewWrap");
+  const previewImg = document.getElementById("logoPreview");
+  if (logo) {
+    previewImg.src = logo;
+    previewWrap.style.display = "block";
+  } else {
+    previewWrap.style.display = "none";
+    previewImg.src = "";
+  }
 }
 
 function renderPrices() {
@@ -170,15 +184,32 @@ function renderPrintSheet(totals) {
       `
     )
     .join("");
+  const logoHtml = state.settings.businessLogo
+    ? `<img src="${state.settings.businessLogo}" alt="Logo" class="print-logo" />`
+    : "";
+
+  const contactParts = [
+    state.settings.businessPhone ? `📞 ${escapeHtml(state.settings.businessPhone)}` : "",
+    state.settings.businessEmail ? `✉ ${escapeHtml(state.settings.businessEmail)}` : "",
+    state.settings.businessAddress ? `📍 ${escapeHtml(state.settings.businessAddress)}` : "",
+  ].filter(Boolean);
+  const contactHtml = contactParts.length
+    ? `<p class="print-contact">${contactParts.join("&nbsp;&nbsp;·&nbsp;&nbsp;")}</p>`
+    : "";
+
   document.getElementById("printSheet").innerHTML = `
     <div class="print-header">
-      <div>
-        <h1>Presupuesto</h1>
-        <p>${escapeHtml(state.settings.businessName)}</p>
+      <div class="print-brand">
+        ${logoHtml}
+        <div>
+          <h1>${escapeHtml(state.settings.businessName)}</h1>
+          ${contactHtml}
+        </div>
       </div>
       <div class="print-meta">
-        <p>${formatDate(state.quote.date)}</p>
+        <p><strong>Presupuesto</strong></p>
         <p>${escapeHtml(state.quote.number || "Sin numero")}</p>
+        <p>${formatDate(state.quote.date)}</p>
         <p>${selectedTemplate ? escapeHtml(selectedTemplate.name) : "Trabajo"}</p>
       </div>
     </div>
