@@ -184,9 +184,8 @@ function renderPrintSheet(totals) {
       `
     )
     .join("");
-  const logoHtml = state.settings.businessLogo
-    ? `<img src="${state.settings.businessLogo}" alt="Logo" class="print-logo" />`
-    : "";
+  const logoSrc = state.settings.businessLogo || "../assets/cotiza-logo-mark.svg";
+  const logoHtml = `<img src="${logoSrc}" alt="Logo" class="print-logo" />`;
 
   const contactParts = [
     state.settings.businessPhone ? `📞 ${escapeHtml(state.settings.businessPhone)}` : "",

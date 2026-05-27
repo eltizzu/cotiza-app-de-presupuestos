@@ -44,6 +44,10 @@
 - [x] Aviso visible de demo publica.
 - [x] Texto legal minimo visible dentro de la demo.
 - [x] Boton para restaurar datos iniciales de demo.
+- [x] Logo base de Cotiza guardado en `assets/`.
+- [x] Logo visible en cabecera de la app.
+- [x] Logo visible en impresion si el usuario no cargo logo propio.
+- [x] Guia rapida dentro de la app para probar la demo sin explicacion externa.
 - [x] Ajustes responsive para pantallas moviles.
 - [x] Persistencia local de la demo en el navegador.
 - [x] Documentacion viva actualizada con la primera demo.
@@ -84,6 +88,7 @@
 - [x] Manual de uso actualizado.
 - [x] Manual de uso reescrito como guia paso a paso.
 - [x] Tutorial de primer presupuesto incluido.
+- [x] Guia rapida de prueba incorporada en la app.
 - [x] Resumen legal/fiscal actualizado para demo local.
 - [x] Documento de web legal actualizado para almacenamiento local y backup.
 - [x] Decisiones de producto actualizadas.

@@ -194,6 +194,21 @@ Decision de producto:
 - La demo publica debe facilitar volver a los ejemplos iniciales.
 - Antes de publicarla definitivamente conviene hacer una prueba visual real en movil y escritorio.
 
+## 2026-05-27 - Logo y recorrido guiado de demo
+
+Se agrego:
+
+- Logo base de Cotiza en la carpeta `assets/`.
+- Logo visible en la cabecera principal de la app.
+- Uso del logo de Cotiza en la impresion cuando el usuario no cargo un logo propio del negocio.
+- Guia rapida dentro de "Inicio" para que una persona pueda probar la demo sin explicacion externa.
+
+Decision de producto:
+
+- La demo debe sentirse como producto presentable, no como prototipo anonimo.
+- La guia rapida prioriza una prueba concreta: calcular un presupuesto de pintura, editar una linea, agregar una extra, guardar, cambiar estado e imprimir.
+- La identidad visual no debe tapar el objetivo principal: validar si el flujo de presupuesto se entiende y aporta valor.
+
 ## 2026-05-15 - Separacion inicial de JavaScript
 
 Se separo la primera parte de la estructura tecnica:

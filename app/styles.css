@@ -99,6 +99,21 @@ h2,
   background: var(--surface);
 }
 
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.app-logo {
+  width: 54px;
+  height: 54px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--soft);
+  object-fit: contain;
+}
+
 h1,
 h2,
 p {
@@ -188,6 +203,34 @@ h2 {
 
 .compact-heading {
   margin: 0 0 14px;
+}
+
+.test-guide {
+  display: grid;
+  grid-template-columns: minmax(240px, 340px) 1fr;
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 24px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.test-guide p {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.test-guide ol {
+  margin: 0;
+  padding-left: 22px;
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.test-guide li + li {
+  margin-top: 6px;
 }
 
 .form-grid,
@@ -621,6 +664,7 @@ td input {
   .layout,
   .split,
   .backup-panel,
+  .test-guide,
   .budget-footer {
     grid-template-columns: 1fr;
   }
@@ -681,6 +725,7 @@ td input {
 
   .entry-form,
   .backup-panel,
+  .test-guide,
   .saved-quotes,
   .totals,
   .manual-line {

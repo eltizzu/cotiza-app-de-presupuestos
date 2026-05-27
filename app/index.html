@@ -14,9 +14,12 @@
       <span>No cargues datos sensibles. La informacion se guarda solo en este navegador y puede borrarse desde "Restaurar demo".</span>
     </section>
     <header class="topbar">
-      <div>
-        <p class="eyebrow">Demo V1</p>
-        <h1>Cotiza</h1>
+      <div class="brand-lockup">
+        <img class="app-logo" src="../assets/cotiza-logo-mark.svg" alt="Cotiza" />
+        <div>
+          <p class="eyebrow">Demo V1</p>
+          <h1>Cotiza</h1>
+        </div>
       </div>
       <div class="business-summary">
         <span id="businessName">Mi negocio</span>
@@ -35,6 +38,20 @@
 
       <section class="content">
         <section class="panel active" id="setup">
+          <div class="test-guide">
+            <div>
+              <p class="eyebrow">Probar primero</p>
+              <h2>Recorrido rapido de la demo</h2>
+              <p>Usa los datos de ejemplo para probar sin cargar todo desde cero.</p>
+            </div>
+            <ol>
+              <li>Entra en <strong>Presupuesto</strong>.</li>
+              <li>Elige <strong>Pintar habitacion</strong>.</li>
+              <li>Usa <strong>25 m2</strong> y pulsa <strong>Calcular base</strong>.</li>
+              <li>Edita una linea, agrega una extra y guarda el presupuesto.</li>
+              <li>Cambia el estado, filtra el historial e imprime o guarda PDF.</li>
+            </ol>
+          </div>
           <div class="section-heading">
             <p class="eyebrow">Configuracion</p>
             <h2>Datos minimos para empezar</h2>
@@ -45,7 +62,7 @@
               <input id="inputBusinessName" value="Reformas Norte" />
             </label>
             <label>
-              Teléfono
+              Telefono
               <input id="inputBusinessPhone" type="tel" placeholder="Ej: 612 345 678" />
             </label>
             <label>
@@ -53,8 +70,8 @@
               <input id="inputBusinessEmail" type="email" placeholder="Ej: info@minegocio.com" />
             </label>
             <label style="grid-column: 1 / -1;">
-              Dirección
-              <input id="inputBusinessAddress" placeholder="Ej: Calle Mayor 5, 29001 Málaga" />
+              Direccion
+              <input id="inputBusinessAddress" placeholder="Ej: Calle Mayor 5, 29001 Malaga" />
             </label>
             <label style="grid-column: 1 / -1;">
               Logo del negocio

@@ -26,6 +26,8 @@ Conviene usarlas en ese orden la primera vez.
 
 En "Inicio" se cargan los datos generales del negocio.
 
+La demo tambien muestra un recorrido rapido para probar Cotiza sin cargar datos desde cero. Ese recorrido recomienda empezar por un presupuesto de pintura con datos de ejemplo, editar una partida, agregar una linea extra, guardar el presupuesto y revisar la impresion.
+
 Campos:
 
 - Nombre del negocio.
