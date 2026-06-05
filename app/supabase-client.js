@@ -200,6 +200,16 @@
       const logoutButton = document.getElementById("logout-btn");
       if (loginButton) loginButton.hidden = isLoggedIn;
       if (logoutButton) logoutButton.hidden = !isLoggedIn;
+
+      // Banner y botón restaurar: ocultar advertencias cuando hay nube conectada
+      const noticeText = document.getElementById("demo-notice-text");
+      const restoreBtn = document.querySelector("button.restore-btn, #restore-demo, [data-action='restore']");
+      if (noticeText) {
+        noticeText.textContent = isLoggedIn
+          ? "Tus datos se guardan en la nube automaticamente."
+          : "No cargues datos sensibles. La informacion se guarda solo en este navegador y puede borrarse desde \"Restaurar demo\".";
+      }
+      if (restoreBtn) restoreBtn.hidden = isLoggedIn;
     },
   };
 
