@@ -209,6 +209,73 @@ Decision de producto:
 - La guia rapida prioriza una prueba concreta: calcular un presupuesto de pintura, editar una linea, agregar una extra, guardar, cambiar estado e imprimir.
 - La identidad visual no debe tapar el objetivo principal: validar si el flujo de presupuesto se entiende y aporta valor.
 
+## 2026-05-28 - Analisis inicial de competencia
+
+Se creo un documento de analisis competitivo con referencias de apps y programas cercanos.
+
+Decision de producto:
+
+- Cotiza no debe competir como ERP ni como software tecnico de mediciones.
+- Cotiza tampoco debe posicionarse como una IA que inventa presupuestos.
+- La posicion recomendada es una herramienta simple y profesional para crear presupuestos a partir de precios, rendimientos y trabajos tipo controlados por el usuario.
+- Las ideas utiles de la competencia se usaran como aprendizaje, no como excusa para agregar modulos antes de validar.
+
+## 2026-05-28 - Aprendizaje de competencia aplicado a carga y calculadora
+
+Se aclaro el objetivo del analisis competitivo:
+
+- No se busca salir a competir copiando funcionalidades.
+- Se busca aprender como hacer mas facil cargar precios, consumos, tiempos y trabajos tipo.
+- Se busca que la calculadora sea mas clara para una persona no tecnica.
+
+Decision de producto:
+
+- Cotiza debe reducir friccion con asistentes cortos por oficio, ejemplos precargados y explicaciones visibles del calculo.
+- La estructura interna puede seguir siendo precios, rendimientos y trabajos tipo, pero la interfaz no debe obligar al usuario a pensar en esos conceptos desde el primer minuto.
+- El siguiente pulido de demo deberia mejorar ayudas en pantalla y mostrar formulas humanas despues de calcular.
+
+## 2026-05-28 - Profesional por dentro, simple por fuera
+
+Se ajusto la demo para reforzar la direccion del producto:
+
+- Ayudas visibles en precios, consumos/tiempos y plantillas.
+- Lenguaje mas cercano para reducir friccion.
+- Boton principal del presupuesto renombrado a "Crear presupuesto base".
+- Explicacion visible de formulas despues de calcular un presupuesto.
+
+Decision de producto:
+
+- Cotiza no debe perder funcionalidad profesional, pero debe evitar que el cliente sienta que esta configurando un sistema complejo.
+- La complejidad debe estar ordenada por debajo; la interfaz debe resolver el siguiente paso del usuario.
+- La version movil se mantiene como condicion importante para cada cambio de experiencia.
+
+## 2026-05-28 - Ayuda sin inflar la interfaz
+
+Se agrego una ayuda simple en "Plantillas" para orientar al usuario a duplicar una plantilla de ejemplo y ajustarla.
+
+Decision de producto:
+
+- Antes de crear asistentes completos, Cotiza debe probar ayudas pequenas y claras.
+- No se agregan muchos botones si la misma claridad puede lograrse con texto corto y una accion existente.
+- La carga guiada debe nacer solo si reduce esfuerzo real, no por sumar una funcion mas.
+
+## 2026-06-05 - Sync inicial con Supabase validado
+
+Se reviso y ajusto la integracion Supabase:
+
+- Login inicial con Supabase.
+- Business creado/cargado por usuario.
+- Lectura de negocio, precios, rendimientos, plantillas y presupuestos.
+- Escritura de settings, precios, rendimientos, plantillas y presupuestos.
+- Fallback local con `localStorage` para usuarios sin login.
+- Pruebas automatizadas con cliente Supabase simulado.
+
+Decision tecnica:
+
+- La demo debe seguir funcionando sin cuenta.
+- Cuando hay sesion, las acciones principales deben sincronizar contra Supabase sin cambiar el flujo visual.
+- La coherencia entre datos locales y remotos es prioritaria: no se deben permitir duplicados locales que choquen con claves unicas remotas.
+
 ## 2026-05-15 - Separacion inicial de JavaScript
 
 Se separo la primera parte de la estructura tecnica:

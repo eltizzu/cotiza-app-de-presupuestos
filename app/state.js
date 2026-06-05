@@ -1,4 +1,6 @@
 (function () {
+const core = window.CotizaCore;
+
 const initialState = {
   settings: {
     businessName: "Reformas Norte",
@@ -142,20 +144,26 @@ function loadState() {
     saved = initialState;
   }
 
+  const safeSaved = core.sanitizeImportedState(saved, initialState);
   const normalized = {
     ...initialState,
-    ...saved,
-    settings: { ...initialState.settings, ...saved.settings },
-    prices: mergeByKey(saved.prices, initialState.prices, "name"),
-    rules: mergeByKey(saved.rules, initialState.rules, "name"),
-    templates: mergeByKey(saved.templates, initialState.templates, "id"),
-    budgetLines: saved.budgetLines || [],
-    draftTemplateLines: saved.draftTemplateLines || [],
-    editingTemplateId: saved.editingTemplateId || null,
-    quote: { ...initialState.quote, ...saved.quote },
-    nextQuoteNumber: saved.nextQuoteNumber || initialState.nextQuoteNumber,
-    savedQuotes: saved.savedQuotes || [],
-    historyFilters: { ...initialState.historyFilters, ...saved.historyFilters },
+    ...safeSaved,
+    settings: {
+      ...initialState.settings,
+      ...safeSaved.settings,
+      currency: core.normalizeCurrency(safeSaved.settings.currency, initialState.settings.currency),
+      businessLogo: core.safeLogoSrc(safeSaved.settings.businessLogo),
+    },
+    prices: mergeByKey(safeSaved.prices, initialState.prices, "name"),
+    rules: mergeByKey(safeSaved.rules, initialState.rules, "name"),
+    templates: mergeByKey(safeSaved.templates, initialState.templates, "id"),
+    budgetLines: safeSaved.budgetLines || [],
+    draftTemplateLines: safeSaved.draftTemplateLines || [],
+    editingTemplateId: safeSaved.editingTemplateId || null,
+    quote: { ...initialState.quote, ...safeSaved.quote },
+    nextQuoteNumber: safeSaved.nextQuoteNumber || initialState.nextQuoteNumber,
+    savedQuotes: safeSaved.savedQuotes || [],
+    historyFilters: { ...initialState.historyFilters, ...safeSaved.historyFilters },
   };
 
   normalized.savedQuotes = normalized.savedQuotes.map(normalizeQuote);
@@ -165,14 +173,19 @@ function loadState() {
 const state = loadState();
 
 function saveState() {
-  localStorage.setItem("cotiza-demo-state", JSON.stringify(state));
+  try {
+    localStorage.setItem("cotiza-demo-state", JSON.stringify(state));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 const money = (value) =>
   new Intl.NumberFormat("es-ES", {
     style: "currency",
-    currency: state.settings.currency || "EUR",
-  }).format(Number(value) || 0);
+    currency: core.normalizeCurrency(state.settings.currency, "EUR"),
+  }).format(core.toSafeNumber(value, 0));
 
 const getPrice = (name) => state.prices.find((price) => price.name === name);
 const getRule = (name) => state.rules.find((rule) => rule.name === name);
@@ -187,6 +200,7 @@ function escapeHtml(value) {
 }
 
 window.Cotiza = {
+  core,
   escapeHtml,
   getPrice,
   getRule,

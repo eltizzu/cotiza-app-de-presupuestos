@@ -4,11 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cotiza</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/cotiza-logo-mark.svg" />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <!-- Login overlay -->
+    <div id="cotiza-login-overlay" style="display:none; position:fixed; inset:0; background:#f8f9fa; z-index:1000; align-items:center; justify-content:center; flex-direction:column; gap:16px;">
+      <h2 style="font-family:'DM Sans',sans-serif; font-size:1.5rem; font-weight:700;">Cotiza</h2>
+      <div style="background:white; padding:32px; border-radius:12px; box-shadow:0 2px 16px rgba(0,0,0,0.08); width:320px; display:flex; flex-direction:column; gap:12px;">
+        <label style="font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;">Email
+          <input id="login-email" type="email" placeholder="tu@email.com" style="display:block; width:100%; margin-top:4px; padding:8px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px;" />
+        </label>
+        <label style="font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600;">Contraseña
+          <input id="login-password" type="password" placeholder="••••••••" style="display:block; width:100%; margin-top:4px; padding:8px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px;" />
+        </label>
+        <div id="login-error" style="color:#e53e3e; font-size:13px; display:none;"></div>
+        <button id="login-btn" style="background:#1a1a2e; color:white; border:none; border-radius:8px; padding:10px; font-size:14px; font-weight:600; cursor:pointer;">Entrar</button>
+        <button id="login-cancel" type="button" style="background:white; color:#1a1a2e; border:1px solid #ddd; border-radius:8px; padding:10px; font-size:14px; font-weight:600; cursor:pointer;">Seguir sin nube</button>
+      </div>
+    </div>
     <section class="demo-notice" aria-label="Aviso de demo">
       <strong>Demo publica de Cotiza.</strong>
       <span>No cargues datos sensibles. La informacion se guarda solo en este navegador y puede borrarse desde "Restaurar demo".</span>
@@ -25,14 +42,19 @@
         <span id="businessName">Mi negocio</span>
         <strong id="defaultMargin">Margen 20%</strong>
       </div>
+      <div class="cloud-actions">
+        <span id="cloudStatus">Modo local</span>
+        <button class="secondary-action" id="openLogin" type="button">Conectar nube</button>
+        <button class="secondary-action" id="logout-btn" type="button" hidden>Salir</button>
+      </div>
     </header>
 
     <main class="layout">
       <aside class="sidebar" aria-label="Modulos">
         <button class="nav-button active" data-section="setup">Inicio</button>
         <button class="nav-button" data-section="prices">Precios</button>
-        <button class="nav-button" data-section="rules">Rendimientos</button>
-        <button class="nav-button" data-section="templates">Trabajos tipo</button>
+        <button class="nav-button" data-section="rules">Consumos y tiempos</button>
+        <button class="nav-button" data-section="templates">Plantillas</button>
         <button class="nav-button" data-section="budget">Presupuesto</button>
       </aside>
 
@@ -47,7 +69,7 @@
             <ol>
               <li>Entra en <strong>Presupuesto</strong>.</li>
               <li>Elige <strong>Pintar habitacion</strong>.</li>
-              <li>Usa <strong>25 m2</strong> y pulsa <strong>Calcular base</strong>.</li>
+              <li>Usa <strong>25 m2</strong> y pulsa <strong>Crear presupuesto base</strong>.</li>
               <li>Edita una linea, agrega una extra y guarda el presupuesto.</li>
               <li>Cambia el estado, filtra el historial e imprime o guarda PDF.</li>
             </ol>
@@ -122,6 +144,10 @@
             <p class="eyebrow">Base controlada</p>
             <h2>Precios</h2>
           </div>
+          <div class="assist-panel">
+            <strong>Que cargar aca</strong>
+            <p>Carga lo que compras, alquilas o cobras por unidad: materiales, horas, transporte y extras habituales. No hace falta cargar todo el negocio de golpe; alcanza con lo que usas para tus trabajos mas comunes.</p>
+          </div>
           <div class="split">
             <form class="entry-form" id="priceForm">
               <label>
@@ -146,7 +172,10 @@
                 Precio unitario
                 <input id="priceValue" type="number" min="0" step="0.01" required />
               </label>
-              <button class="primary-action" type="submit">Agregar precio</button>
+              <div class="action-row form-actions">
+                <button class="primary-action" type="submit" id="savePriceButton">Agregar precio</button>
+                <button class="secondary-action hidden" type="button" id="cancelPriceEdit">Cancelar edicion</button>
+              </div>
             </form>
             <div class="table-wrap">
               <table>
@@ -156,6 +185,7 @@
                     <th>Tipo</th>
                     <th>Unidad</th>
                     <th>Precio</th>
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody id="pricesTable"></tbody>
@@ -167,7 +197,11 @@
         <section class="panel" id="rules">
           <div class="section-heading">
             <p class="eyebrow">Calculo transparente</p>
-            <h2>Rendimientos</h2>
+            <h2>Consumos y tiempos</h2>
+          </div>
+          <div class="assist-panel">
+            <strong>Para que sirve</strong>
+            <p>Aca cargas reglas simples: cuanto material se consume o cuanto tiempo lleva una tarea por m2, por unidad o por metro lineal. Cotiza usa estas reglas para no calcular todo a mano cada vez.</p>
           </div>
           <div class="split">
             <form class="entry-form" id="ruleForm">
@@ -191,7 +225,10 @@
                 Unidad resultante
                 <input id="ruleUnit" placeholder="litros, horas, unidades" required />
               </label>
-              <button class="primary-action" type="submit">Agregar rendimiento</button>
+              <div class="action-row form-actions">
+                <button class="primary-action" type="submit" id="saveRuleButton">Agregar rendimiento</button>
+                <button class="secondary-action hidden" type="button" id="cancelRuleEdit">Cancelar edicion</button>
+              </div>
             </form>
             <div class="table-wrap">
               <table>
@@ -201,6 +238,7 @@
                     <th>Variable</th>
                     <th>Factor</th>
                     <th>Resultado</th>
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody id="rulesTable"></tbody>
@@ -212,7 +250,22 @@
         <section class="panel" id="templates">
           <div class="section-heading">
             <p class="eyebrow">Recetas reutilizables</p>
-            <h2>Trabajos tipo</h2>
+            <h2>Plantillas de trabajos</h2>
+          </div>
+          <div class="assist-panel">
+            <strong>La parte que ahorra tiempo</strong>
+            <p>Una plantilla combina precios y consumos para armar un presupuesto base. Por ejemplo: pintar habitacion = pintura + materiales auxiliares + horas + desplazamiento.</p>
+          </div>
+          <div class="starter-help">
+            <div>
+              <strong>Si no sabes por donde empezar</strong>
+              <p>Usa una plantilla de ejemplo, duplicala y cambia precios, tiempos o partidas. Es mas facil corregir una base realista que crear todo desde cero.</p>
+            </div>
+            <ol>
+              <li>Duplica una plantilla parecida.</li>
+              <li>Ajusta las partidas a tu forma de trabajar.</li>
+              <li>Pruebala en Presupuesto con medidas reales.</li>
+            </ol>
           </div>
           <div class="split wide-split">
             <form class="entry-form" id="templateForm">
@@ -251,12 +304,13 @@
                 <label>
                   Multiplicador
                   <input id="templateLineMultiplier" type="number" min="0" step="0.01" value="1" />
+                  <small>Usalo para manos, merma o extras. Ej: 1,08 suma 8%.</small>
                 </label>
                 <button class="secondary-action" type="button" id="addTemplateLine">Agregar partida</button>
               </div>
               <div class="mini-list" id="draftTemplateLines"></div>
               <div class="action-row">
-                <button class="primary-action" type="submit" id="saveTemplateButton">Guardar trabajo tipo</button>
+                <button class="primary-action" type="submit" id="saveTemplateButton">Guardar plantilla</button>
                 <button class="secondary-action hidden" type="button" id="cancelTemplateEdit">Cancelar edicion</button>
               </div>
             </form>
@@ -302,7 +356,7 @@
           </div>
           <div class="budget-controls">
             <label>
-              Trabajo tipo
+              Plantilla de trabajo
               <select id="budgetTemplate"></select>
             </label>
             <label>
@@ -317,8 +371,10 @@
               Metros lineales
               <input id="budgetLinear" type="number" min="0" step="0.1" value="0" />
             </label>
-            <button class="primary-action" id="calculateBudget">Calcular base</button>
+            <button class="primary-action" id="calculateBudget">Crear presupuesto base</button>
           </div>
+
+          <div class="calculation-explanation" id="calculationExplanation"></div>
 
           <form class="manual-line" id="manualLineForm">
             <label>
@@ -402,8 +458,14 @@
 
     <section class="print-sheet" id="printSheet" aria-label="Presupuesto imprimible"></section>
 
+    <script src="./core.js"></script>
     <script src="./state.js"></script>
     <script src="./render.js"></script>
     <script src="./actions.js"></script>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="./config.js"></script>
+    <script src="./supabase-sync.js"></script>
+    <script src="./supabase-client.js"></script>
   </body>
 </html>

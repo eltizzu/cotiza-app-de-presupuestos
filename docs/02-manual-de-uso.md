@@ -6,7 +6,7 @@ Cotiza es una herramienta para crear presupuestos de reformas, oficios y trabajo
 
 La idea principal es:
 
-> Precios + Rendimientos + Trabajos tipo = Presupuesto base editable.
+> Precios + Consumos y tiempos + Plantillas = Presupuesto base editable.
 
 Cotiza no inventa precios ni decide por el usuario. Calcula una base usando la informacion cargada y deja que la persona revise, edite y cierre el presupuesto.
 
@@ -16,8 +16,8 @@ La demo tiene cinco secciones principales:
 
 - Inicio.
 - Precios.
-- Rendimientos.
-- Trabajos tipo.
+- Consumos y tiempos.
+- Plantillas de trabajos.
 - Presupuesto.
 
 Conviene usarlas en ese orden la primera vez.
@@ -56,6 +56,8 @@ El backup es un archivo JSON con los datos locales de Cotiza.
 Importante:
 
 - La demo guarda datos en el navegador.
+- Si se inicia sesion, Cotiza puede cargar y guardar datos en Supabase.
+- Sin sesion, la app sigue funcionando en modo local con `localStorage`.
 - Si se borra el almacenamiento del navegador, se pueden perder datos.
 - Conviene exportar backup si se cargan datos importantes.
 - Importar un backup reemplaza los datos locales actuales.
@@ -90,11 +92,11 @@ Ejemplos:
 
 Consejo: no hace falta cargar todo al principio. Es mejor empezar con los precios necesarios para los trabajos mas frecuentes.
 
-## 3. Rendimientos
+## 3. Consumos Y Tiempos
 
-En "Rendimientos" se cargan reglas simples para estimar cantidades o tiempos.
+En "Consumos y tiempos" se cargan reglas simples para estimar cantidades o tiempos.
 
-Un rendimiento responde preguntas como:
+Un consumo o tiempo responde preguntas como:
 
 - Cuantas horas lleva una tarea.
 - Cuanto material se consume por m2.
@@ -131,9 +133,9 @@ Si "Horas pintura por m2" vale 0,18 y el trabajo tiene 25 m2, Cotiza estima:
 25 x 0,18 = 4,5 horas
 ```
 
-## 4. Trabajos Tipo
+## 4. Plantillas De Trabajos
 
-Un trabajo tipo es una plantilla reutilizable.
+Una plantilla de trabajo es una receta reutilizable.
 
 Ejemplos:
 
@@ -142,16 +144,16 @@ Ejemplos:
 - Colocar suelo laminado.
 - Cambiar foco.
 
-Cada trabajo tipo combina precios y rendimientos.
+Cada plantilla combina precios, consumos y tiempos.
 
-### Crear Un Trabajo Tipo
+### Crear Una Plantilla
 
-En la seccion "Trabajos tipo":
+En la seccion "Plantillas de trabajos":
 
 1. Escribir el nombre del trabajo.
 2. Escribir una descripcion breve.
 3. Agregar partidas.
-4. Guardar el trabajo tipo.
+4. Guardar la plantilla.
 
 Cada partida necesita:
 
@@ -190,7 +192,7 @@ Ese 1,08 puede representar un 8% adicional por merma.
 
 ### Editar O Duplicar
 
-Cada trabajo tipo se puede:
+Cada plantilla se puede:
 
 - Editar.
 - Duplicar.
@@ -202,6 +204,8 @@ Ejemplo:
 - Pintar habitacion.
 - Pintar piso completo.
 - Pintar local.
+
+Consejo: para empezar mas facil, conviene duplicar una plantilla parecida y cambiarla. Es menos pesado que crear todo desde cero.
 
 ## 5. Presupuesto
 
@@ -227,15 +231,24 @@ Estados disponibles:
 
 El numero se propone automaticamente, pero se puede editar.
 
-### Calcular Base
+### Crear Presupuesto Base
 
 Para crear un presupuesto:
 
-1. Elegir un trabajo tipo.
+1. Elegir una plantilla de trabajo.
 2. Cargar superficie m2, cantidad o metros lineales segun corresponda.
-3. Pulsar "Calcular base".
+3. Pulsar "Crear presupuesto base".
 
-Cotiza genera partidas usando los precios y rendimientos cargados.
+Cotiza genera partidas usando los precios, consumos y tiempos cargados.
+
+Despues de calcular, Cotiza muestra una explicacion simple de cada partida. Por ejemplo:
+
+```text
+25 m2 x 0,18 horas por m2 = 4,5 horas
+4,5 horas x 28 EUR = 126 EUR
+```
+
+La explicacion sirve para entender de donde sale el numero, pero el usuario siempre puede editar la linea antes de guardar o imprimir.
 
 ### Editar Partidas
 
@@ -251,7 +264,7 @@ Esto es importante: el resultado calculado es una base, no un presupuesto cerrad
 
 ### Agregar Lineas Extra
 
-Se pueden agregar conceptos manuales que no esten en el trabajo tipo.
+Se pueden agregar conceptos manuales que no esten en la plantilla.
 
 Ejemplos:
 
@@ -280,7 +293,7 @@ El resumen comercial muestra:
 - Aceptados y total aceptado.
 - Rechazados.
 
-Este historial es local de la demo. No es una base de datos en la nube.
+Sin sesion, este historial es local del navegador. Con sesion iniciada, los presupuestos guardados tambien se sincronizan con Supabase.
 
 ## 7. Imprimir O Guardar PDF
 
@@ -348,25 +361,25 @@ Ir a "Precios" y asegurarse de tener:
 
 Si falta alguno, cargarlo manualmente.
 
-### Paso 3: Revisar Rendimientos
+### Paso 3: Revisar Consumos Y Tiempos
 
-Ir a "Rendimientos" y asegurarse de tener:
+Ir a "Consumos y tiempos" y asegurarse de tener:
 
 - Litros pintura por m2 y mano.
 - Horas pintura por m2.
 - Desplazamiento por trabajo.
 
-### Paso 4: Usar Trabajo Tipo
+### Paso 4: Usar Una Plantilla
 
 Ir a "Presupuesto".
 
 Elegir:
 
-- Trabajo tipo: Pintar habitacion.
+- Plantilla de trabajo: Pintar habitacion.
 - Superficie m2: 25.
 - Cantidad: 1.
 
-Pulsar "Calcular base".
+Pulsar "Crear presupuesto base".
 
 Cotiza deberia crear lineas similares a:
 
@@ -429,8 +442,8 @@ Revisar la vista de impresion y guardar el PDF desde el navegador.
 
 - Revisar siempre el presupuesto antes de enviarlo.
 - Mantener precios actualizados.
-- Ajustar rendimientos segun experiencia real.
-- Usar trabajos tipo como base, no como verdad absoluta.
+- Ajustar consumos y tiempos segun experiencia real.
+- Usar plantillas como base, no como verdad absoluta.
 - Exportar backup si se cargaron datos importantes.
 - No usar la demo como sistema fiscal, contable o legal.
 - Imprimir solo despues de revisar el resultado final.
@@ -438,8 +451,8 @@ Revisar la vista de impresion y guardar el PDF desde el navegador.
 ## Limites De La Demo Actual
 
 - Los datos se guardan en el navegador.
-- No hay usuarios ni contrasenas.
-- No hay sincronizacion en la nube.
+- Hay login inicial con Supabase, pero todavia no hay roles avanzados ni panel de administracion.
+- Sin login, la demo sigue usando almacenamiento local.
 - No hay facturacion.
 - No hay contabilidad.
 - No hay control de obra.

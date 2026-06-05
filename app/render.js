@@ -1,5 +1,5 @@
 (function () {
-const { escapeHtml, money, quoteStatuses, state, variableLabels } = window.Cotiza;
+const { core, escapeHtml, money, quoteStatuses, state, variableLabels } = window.Cotiza;
 
 function showSection(id) {
   document.querySelectorAll(".panel").forEach((panel) => panel.classList.remove("active"));
@@ -19,7 +19,7 @@ function renderSettings() {
   document.getElementById("inputTax").value = state.settings.tax;
   document.getElementById("inputMargin").value = state.settings.margin;
 
-  const logo = state.settings.businessLogo;
+  const logo = core.safeLogoSrc(state.settings.businessLogo);
   const previewWrap = document.getElementById("logoPreviewWrap");
   const previewImg = document.getElementById("logoPreview");
   if (logo) {
@@ -34,12 +34,18 @@ function renderSettings() {
 function renderPrices() {
   document.getElementById("pricesTable").innerHTML = state.prices
     .map(
-      (price) => `
+      (price, index) => `
         <tr>
           <td>${escapeHtml(price.name)}</td>
           <td>${escapeHtml(price.type)}</td>
           <td>${escapeHtml(price.unit)}</td>
           <td>${money(price.price)}</td>
+          <td>
+            <span class="line-actions">
+              <button class="line-action" type="button" data-price-edit="${index}" aria-label="Editar precio">Editar</button>
+              <button class="remove-line" type="button" data-price-delete="${index}" aria-label="Eliminar precio">x</button>
+            </span>
+          </td>
         </tr>
       `
     )
@@ -50,12 +56,18 @@ function renderPrices() {
 function renderRules() {
   document.getElementById("rulesTable").innerHTML = state.rules
     .map(
-      (rule) => `
+      (rule, index) => `
         <tr>
           <td>${escapeHtml(rule.name)}</td>
           <td>${variableLabels[rule.variable]}</td>
           <td>${rule.factor}</td>
           <td>${escapeHtml(rule.unit)}</td>
+          <td>
+            <span class="line-actions">
+              <button class="line-action" type="button" data-rule-edit="${index}" aria-label="Editar rendimiento">Editar</button>
+              <button class="remove-line" type="button" data-rule-delete="${index}" aria-label="Eliminar rendimiento">x</button>
+            </span>
+          </td>
         </tr>
       `
     )
@@ -141,6 +153,7 @@ function renderBudget() {
     )
     .join("");
   renderTotals();
+  renderCalculationExplanation();
 }
 
 function getTotals() {
@@ -160,6 +173,7 @@ function renderTotals() {
   document.getElementById("taxTotal").textContent = money(tax);
   document.getElementById("grandTotal").textContent = money(total);
   renderPrintSheet({ cost, margin, beforeTax, tax, total });
+  renderCalculationExplanation();
 }
 
 function renderLineTotal(index) {
@@ -167,6 +181,42 @@ function renderLineTotal(index) {
   const target = document.querySelector(`[data-line-total="${index}"]`);
   if (!line || !target) return;
   target.textContent = money(line.quantity * line.unitPrice);
+  renderCalculationExplanation();
+}
+
+function renderCalculationExplanation() {
+  const target = document.getElementById("calculationExplanation");
+  if (!target) return;
+
+  const calculatedLines = state.budgetLines.filter((line) => line.source);
+  if (calculatedLines.length === 0) {
+    target.innerHTML = "";
+    return;
+  }
+
+  const items = calculatedLines
+    .map((line) => {
+      const source = line.source;
+      const multiplierText =
+        source.multiplier && source.multiplier !== 1 ? ` x ${source.multiplier}` : "";
+      const ruleText = source.ruleName ? `${escapeHtml(source.ruleName)}: ` : "";
+      const quantityFormula = `${escapeHtml(source.inputValue)} ${escapeHtml(source.inputLabel)} x ${escapeHtml(source.factor)}${escapeHtml(multiplierText)} = ${escapeHtml(line.quantity)} ${escapeHtml(line.unit)}`;
+      const totalFormula = `${escapeHtml(line.quantity)} ${escapeHtml(line.unit)} x ${money(line.unitPrice)} = ${money(line.quantity * line.unitPrice)}`;
+      return `
+        <div class="explanation-item">
+          <strong>${escapeHtml(line.name)}</strong>
+          <span>${ruleText}${quantityFormula}</span>
+          <b>${totalFormula}</b>
+        </div>
+      `;
+    })
+    .join("");
+
+  target.innerHTML = `
+    <strong>Como se calculo esta base</strong>
+    <p>Estas cuentas salen de los precios y consumos cargados. Podes editar cualquier linea antes de guardar o imprimir.</p>
+    <div class="explanation-grid">${items}</div>
+  `;
 }
 
 function renderPrintSheet(totals) {
@@ -184,16 +234,16 @@ function renderPrintSheet(totals) {
       `
     )
     .join("");
-  const logoSrc = state.settings.businessLogo || "../assets/cotiza-logo-mark.svg";
-  const logoHtml = `<img src="${logoSrc}" alt="Logo" class="print-logo" />`;
+  const logoSrc = core.safeLogoSrc(state.settings.businessLogo) || "../assets/cotiza-logo-mark.svg";
+  const logoHtml = `<img src="${escapeHtml(logoSrc)}" alt="Logo" class="print-logo" />`;
 
   const contactParts = [
-    state.settings.businessPhone ? `📞 ${escapeHtml(state.settings.businessPhone)}` : "",
-    state.settings.businessEmail ? `✉ ${escapeHtml(state.settings.businessEmail)}` : "",
-    state.settings.businessAddress ? `📍 ${escapeHtml(state.settings.businessAddress)}` : "",
+    state.settings.businessPhone ? `Tel. ${escapeHtml(state.settings.businessPhone)}` : "",
+    state.settings.businessEmail ? `Email ${escapeHtml(state.settings.businessEmail)}` : "",
+    state.settings.businessAddress ? `Direccion ${escapeHtml(state.settings.businessAddress)}` : "",
   ].filter(Boolean);
   const contactHtml = contactParts.length
-    ? `<p class="print-contact">${contactParts.join("&nbsp;&nbsp;·&nbsp;&nbsp;")}</p>`
+    ? `<p class="print-contact">${contactParts.join("&nbsp;&nbsp;-&nbsp;&nbsp;")}</p>`
     : "";
 
   document.getElementById("printSheet").innerHTML = `
@@ -331,9 +381,23 @@ function renderCommercialSummary() {
   `;
 }
 
+function renderAll() {
+  renderSettings();
+  renderPrices();
+  renderRules();
+  renderTemplates();
+  renderTemplateOptions();
+  renderDraftTemplateLines();
+  renderQuoteData();
+  renderSavedQuotes();
+  renderBudget();
+}
+
 window.CotizaRender = {
   getTotals,
+  renderAll,
   renderBudget,
+  renderCalculationExplanation,
   renderCommercialSummary,
   renderDraftTemplateLines,
   renderLineTotal,

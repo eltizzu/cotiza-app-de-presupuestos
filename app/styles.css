@@ -153,6 +153,18 @@ h2 {
   color: var(--accent);
 }
 
+.cloud-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cloud-actions span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .layout {
   display: grid;
   grid-template-columns: 220px 1fr;
@@ -231,6 +243,84 @@ h2 {
 
 .test-guide li + li {
   margin-top: 6px;
+}
+
+.assist-panel,
+.calculation-explanation,
+.starter-help {
+  margin-bottom: 20px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--soft);
+}
+
+.assist-panel strong,
+.calculation-explanation strong,
+.starter-help strong {
+  display: block;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.assist-panel p,
+.calculation-explanation p,
+.starter-help p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.starter-help {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr);
+  gap: 14px;
+  background: var(--surface);
+}
+
+.starter-help ol {
+  margin: 0;
+  padding-left: 22px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.starter-help li + li {
+  margin-top: 5px;
+}
+
+.calculation-explanation:empty {
+  display: none;
+}
+
+.explanation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.explanation-item {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.explanation-item span {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.explanation-item b {
+  display: block;
+  margin-top: 6px;
+  color: var(--ink);
+  font-size: 14px;
 }
 
 .form-grid,
@@ -384,6 +474,13 @@ label {
   color: var(--muted);
   font-size: 13px;
   font-weight: 700;
+}
+
+label small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
 }
 
 input,
@@ -555,6 +652,10 @@ td input {
   margin-top: 14px;
 }
 
+.form-actions {
+  margin-top: 0;
+}
+
 .template-actions button,
 .action-row button {
   flex: 1;
@@ -665,6 +766,8 @@ td input {
   .split,
   .backup-panel,
   .test-guide,
+  .starter-help,
+  .explanation-grid,
   .budget-footer {
     grid-template-columns: 1fr;
   }

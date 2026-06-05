@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cotiza — Presupuestos profesionales para oficios y reformas</title>
-  <meta name="description" content="Cotiza convierte tus precios, rendimientos y trabajos frecuentes en presupuestos editables, ordenados y listos para imprimir. Sin ERP, sin complicaciones." />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231d4ed8'/%3E%3Ctext x='16' y='23' font-family='sans-serif' font-size='20' font-weight='bold' text-anchor='middle' fill='white'%3EC%3C/text%3E%3C/svg%3E" />
+  <title>Cotiza - Presupuestos profesionales para oficios y reformas</title>
+  <meta name="description" content="Cotiza convierte tus precios, rendimientos y trabajos frecuentes en presupuestos editables, ordenados y listos para imprimir." />
+  <link rel="icon" type="image/svg+xml" href="assets/cotiza-logo-mark.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -19,294 +19,178 @@
       --accent-dark: #1e40af;
       --accent-soft: #eff6ff;
       --warm: #ca8a04;
-      --radius: 8px;
-      --shadow: 0 2px 8px rgba(29,78,216,0.07);
+      --shadow: 0 2px 8px rgba(29, 78, 216, 0.07);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: "Outfit", sans-serif; color: var(--text); background: linear-gradient(135deg, #f4f1ec 0%, #ece8e1 100%); min-height: 100vh; }
-
-    nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; height: 64px; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
-    .nav-brand { display: flex; align-items: center; gap: 10px; font-family: "Outfit", sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--accent-dark); text-decoration: none; }
-    .nav-brand img { height: 36px; width: auto; display: block; }
-    .nav-brand span { color: var(--accent); }
+    nav { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 40px; background: rgba(255,255,255,0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+    .nav-brand { display: flex; align-items: center; gap: 10px; color: var(--accent); font-size: 1.25rem; font-weight: 700; text-decoration: none; }
+    .nav-brand img { width: 36px; height: 36px; }
     .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; }
-    .nav-cta { background: var(--accent) !important; color: #fff !important; padding: 8px 20px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; text-decoration: none; }
-    .nav-cta:hover { background: var(--accent-dark) !important; }
-
-    .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, 1.1fr); gap: clamp(24px, 5vw, 56px); align-items: center; padding: clamp(40px, 6vw, 80px) clamp(20px, 4vw, 60px) 40px; max-width: 1200px; margin: 0 auto; overflow: hidden; }
+    .nav-cta, .btn-primary { background: var(--accent); color: #fff !important; border-radius: 6px; font-weight: 600; text-decoration: none; }
+    .nav-cta { padding: 8px 20px; }
+    .btn-primary { display: inline-block; padding: 13px 28px; }
+    .btn-primary:hover, .nav-cta:hover { background: var(--accent-dark); }
+    .btn-ghost { display: inline-block; padding: 13px 28px; border: 1.5px solid var(--border); border-radius: 6px; color: var(--text); font-weight: 600; text-decoration: none; }
+    .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, 1.1fr); gap: clamp(24px, 5vw, 56px); align-items: center; max-width: 1200px; margin: 0 auto; padding: clamp(40px, 6vw, 80px) clamp(20px, 4vw, 60px) 40px; overflow: hidden; }
     .hero-copy { display: grid; gap: 18px; }
-    .eyebrow { display: inline-block; background: var(--accent-soft); color: var(--accent); font-size: 0.78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 5px 14px; border-radius: 4px; border: 1px solid rgba(29,78,216,0.2); }
-    h1 { font-family: "Outfit", sans-serif; font-size: clamp(2.1rem, 5vw, 3.4rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin: 0; }
+    .eyebrow, .section-label { color: var(--accent); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+    .eyebrow { width: fit-content; padding: 5px 14px; border: 1px solid rgba(29,78,216,0.2); border-radius: 4px; background: var(--accent-soft); }
+    h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); line-height: 1.1; letter-spacing: -0.02em; }
     h1 em { color: var(--accent); font-style: normal; }
-    .hero-sub { font-size: 1.05rem; color: var(--muted); line-height: 1.65; max-width: 560px; margin: 0; }
-    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-    .btn-primary { background: var(--accent); color: #fff; padding: 13px 28px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.95rem; }
-    .btn-primary:hover { background: var(--accent-dark); }
-    .btn-ghost { background: transparent; color: var(--text); padding: 13px 28px; border-radius: 6px; font-weight: 600; text-decoration: none; border: 1.5px solid var(--border); font-size: 0.95rem; }
-    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-    .section { max-width: 960px; margin: 0 auto; padding: 64px 24px; }
-    .section-label { font-size: 0.8rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
-    .section-title { font-family: "Outfit", sans-serif; font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 16px; }
-    .section-sub { color: var(--muted); font-size: 1.05rem; line-height: 1.7; max-width: 600px; }
-
-    .problema-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 40px; }
-    .problema-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
-    .problema-icon { font-size: 1.6rem; margin-bottom: 10px; }
-    .problema-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
-    .problema-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
-
-    .como-funciona { display: flex; flex-direction: column; gap: 16px; margin-top: 40px; }
-    .paso { display: flex; gap: 20px; align-items: flex-start; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
-    .paso-num { font-family: "DM Sans", sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--accent); min-width: 40px; }
-    .paso h3 { font-size: 1rem; font-weight: 600; margin-bottom: 5px; }
-    .paso p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
-
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 40px; }
-    .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
-    .feature-card h3 { font-family: "DM Sans", sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
-    .feature-card ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-    .feature-card li { font-size: 0.88rem; color: var(--muted); display: flex; align-items: center; gap: 8px; }
-    .feature-card li::before { content: "✓"; color: var(--accent); font-weight: 700; flex-shrink: 0; }
-
-    .para-quien { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-top: 36px; }
-    .quien-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; text-align: center; font-size: 0.9rem; font-weight: 500; box-shadow: var(--shadow); }
-    .quien-card span { font-size: 1.6rem; display: block; margin-bottom: 8px; }
-
-    .pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 40px; }
-    .price-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 28px; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow); }
-    .price-card.featured { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-    .price-name { font-family: "DM Sans", sans-serif; font-size: 1rem; font-weight: 700; }
-    .price-amount { font-size: 2rem; font-weight: 700; color: var(--accent); font-family: "DM Sans", sans-serif; }
-    .price-amount span { font-size: 0.9rem; font-weight: 400; color: var(--muted); }
-    .price-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
-    .price-features { list-style: none; display: flex; flex-direction: column; gap: 7px; }
-    .price-features li { font-size: 0.85rem; color: var(--muted); display: flex; gap: 8px; }
-    .price-features li::before { content: "✓"; color: var(--accent); font-weight: 700; flex-shrink: 0; }
-    .price-cta { margin-top: auto; background: var(--accent); color: #fff; text-align: center; padding: 11px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 0.9rem; display: block; }
-    .price-cta:hover { background: var(--accent-dark); }
-    .price-cta.ghost { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
-    .price-cta.ghost:hover { border-color: var(--accent); color: var(--accent); }
-    .badge-pop { font-size: 0.72rem; font-weight: 700; background: var(--warm); color: #fff; padding: 2px 9px; border-radius: 4px; margin-left: 8px; vertical-align: middle; }
-
-    .cta-section { background: #1c1917; color: #fff; text-align: center; padding: 72px 24px; }
-    .cta-section h2 { font-family: "DM Sans", sans-serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; margin-bottom: 14px; }
-    .cta-section p { color: rgba(255,255,255,0.65); font-size: 1rem; margin-bottom: 32px; }
-    .cta-section a { background: var(--accent); color: #fff; padding: 14px 32px; border-radius: 6px; font-weight: 600; text-decoration: none; font-size: 1rem; display: inline-block; }
-    .cta-section a:hover { background: var(--accent-dark); }
-
-    footer { text-align: center; padding: 28px 24px; font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--border); }
-    footer a { color: var(--accent); text-decoration: none; }
-
-    .hero-shot { display: grid; grid-template-columns: 130px minmax(0, 1fr); min-height: 400px; border: 1px solid rgba(29,78,216,0.18); border-radius: 8px; overflow: hidden; box-shadow: 0 8px 32px rgba(29,78,216,0.10); transform: rotate(-1.3deg); text-align: left; font-size: 0.82rem; background: #fff; }
-    .hs-sidebar { background: #1d4ed8; color: #fff; padding: 18px 14px; display: flex; flex-direction: column; gap: 8px; }
-    .hs-logo { width: 36px; height: 36px; border-radius: 6px; background: rgba(255,255,255,0.18); margin-bottom: 6px; display: flex; align-items: center; justify-content: center; font-family: "Outfit",sans-serif; font-weight: 700; font-size: 1rem; }
-    .hs-nav { padding: 8px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 500; color: rgba(255,255,255,0.65); }
+    .hero-sub, .section-sub { color: var(--muted); font-size: 1.05rem; line-height: 1.65; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .hero-shot { display: grid; grid-template-columns: 130px minmax(0, 1fr); min-height: 400px; border: 1px solid rgba(29,78,216,0.18); border-radius: 8px; overflow: hidden; box-shadow: 0 8px 32px rgba(29,78,216,0.10); transform: rotate(-1.3deg); background: #fff; font-size: 0.82rem; }
+    .hs-sidebar { display: grid; align-content: start; gap: 8px; padding: 18px 14px; background: var(--accent); color: #fff; }
+    .hs-logo { display: grid; place-items: center; width: 36px; height: 36px; margin-bottom: 6px; border-radius: 6px; background: rgba(255,255,255,0.18); font-weight: 700; }
+    .hs-nav { padding: 8px 10px; border-radius: 6px; color: rgba(255,255,255,0.72); }
     .hs-nav.active { background: rgba(255,255,255,0.15); color: #fff; }
-    .hs-main { background: #f4f1ec; padding: 20px; display: grid; align-content: start; gap: 14px; }
-    .hs-head { display: flex; justify-content: space-between; align-items: center; }
-    .hs-head strong { font-size: 0.9rem; font-weight: 700; color: #1c1917; }
-    .hs-head span { font-size: 0.72rem; color: #78716c; }
+    .hs-main { display: grid; align-content: start; gap: 14px; padding: 20px; background: var(--bg); }
+    .hs-head, .hs-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .hs-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .hs-stat { background: #fff; border: 1px solid #ddd8d0; border-radius: 6px; padding: 10px; }
-    .hs-stat small { display: block; color: #78716c; font-size: 0.7rem; margin-bottom: 4px; }
-    .hs-stat strong { font-size: 1.3rem; font-weight: 700; color: #1c1917; }
+    .hs-stat, .hs-row, .card, .price-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow); }
+    .hs-stat { padding: 10px; }
+    .hs-stat small, .hs-row span, .card p, .price-desc { color: var(--muted); }
+    .hs-stat strong { display: block; margin-top: 4px; font-size: 1.3rem; }
     .hs-rows { display: grid; gap: 8px; }
-    .hs-row { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid #ddd8d0; border-left: 3px solid #1d4ed8; border-radius: 6px; padding: 10px 12px; }
+    .hs-row { border-left: 3px solid var(--accent); padding: 10px 12px; }
     .hs-row.ok { border-left-color: #16a34a; }
-    .hs-row.pend { border-left-color: #ca8a04; }
+    .hs-row.pend { border-left-color: var(--warm); }
     .hs-row-info { flex: 1; }
     .hs-row-info strong, .hs-row-info span { display: block; }
-    .hs-row-info strong { font-size: 0.82rem; font-weight: 600; color: #1c1917; }
-    .hs-row-info span { font-size: 0.73rem; color: #78716c; margin-top: 2px; }
-    .hs-badge { font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
-    .hs-badge.ok { background: #dcfce7; color: #16a34a; }
-    .hs-badge.pend { background: #fef3c7; color: #b45309; }
-    .hs-badge.sent { background: #eff6ff; color: #1d4ed8; }
-    .hs-amount { font-size: 0.82rem; font-weight: 700; color: #1c1917; white-space: nowrap; }
+    .hs-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.68rem; font-weight: 700; white-space: nowrap; }
+    .hs-badge.ok { background: #dcfce7; color: #166534; }
+    .hs-badge.pend { background: #fef3c7; color: #92400e; }
+    .hs-badge.sent { background: var(--accent-soft); color: var(--accent); }
+    .hs-amount { color: var(--text); font-weight: 700; white-space: nowrap; }
+    .section { max-width: 960px; margin: 0 auto; padding: 64px 24px; }
+    .section-title { margin: 12px 0 16px; font-size: clamp(1.5rem, 3vw, 2.2rem); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 36px; }
+    .card, .price-card { padding: 24px; }
+    .card h3, .price-name { margin-bottom: 8px; font-size: 1rem; }
+    .price-amount { color: var(--accent); font-size: 2rem; font-weight: 700; }
+    .price-features { display: grid; gap: 7px; margin-top: 8px; padding-left: 18px; color: var(--muted); }
+    .price-cta { display: block; margin-top: 18px; padding: 11px; border-radius: 6px; background: var(--accent); color: #fff; text-align: center; text-decoration: none; font-weight: 600; }
+    .cta-section { padding: 72px 24px; background: var(--text); color: #fff; text-align: center; }
+    .cta-section p { margin: 14px 0 30px; color: rgba(255,255,255,0.7); }
+    footer { padding: 28px 24px; border-top: 1px solid var(--border); color: var(--muted); text-align: center; font-size: 0.82rem; }
+    footer a { color: var(--accent); text-decoration: none; }
     @media (max-width: 760px) { .hero { grid-template-columns: 1fr; } .hero-shot { transform: none; } }
     @media (max-width: 600px) { nav { padding: 0 20px; } .nav-links { display: none; } }
   </style>
 </head>
 <body>
-
-<nav>
-  <a class="nav-brand" href="#"><img src="assets/cotiza-logo-mark.svg" alt="" /><span>Cotiza</span></a>
-  <div class="nav-links">
-    <a href="#problema">Qué resuelve</a>
-    <a href="#como">Cómo funciona</a>
-    <a href="#precios">Precios</a>
-    <a class="nav-cta" href="app/index.html">Ver demo</a>
-  </div>
-</nav>
-
-<section class="hero">
-  <div class="hero-copy">
-    <div class="eyebrow">Presupuestos para oficios y reformas</div>
-    <h1>Carga tus precios una vez. <em>Presupuesta en minutos.</em></h1>
-    <p class="hero-sub">Cotiza convierte tus precios, rendimientos y trabajos frecuentes en presupuestos editables, ordenados y listos para imprimir. Sin ERP, sin aprender software complejo.</p>
-    <div class="hero-actions">
-      <a class="btn-primary" href="app/index.html">Ver demo interactiva</a>
-      <a class="btn-ghost" href="manual.html" target="_blank">Manual de uso</a>
+  <nav>
+    <a class="nav-brand" href="#"><img src="assets/cotiza-logo-mark.svg" alt="" /><span>Cotiza</span></a>
+    <div class="nav-links">
+      <a href="#problema">Que resuelve</a>
+      <a href="#como">Como funciona</a>
+      <a href="#precios">Precios</a>
+      <a class="nav-cta" href="app/index.html">Ver demo</a>
     </div>
-  </div>
-  <div class="hero-shot" aria-hidden="true">
-    <div class="hs-sidebar">
-      <div class="hs-logo">C</div>
-      <div class="hs-nav active">Presupuestos</div>
-      <div class="hs-nav">Precios</div>
-      <div class="hs-nav">Clientes</div>
-      <div class="hs-nav">Informes</div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">Presupuestos para oficios y reformas</div>
+      <h1>Carga tus precios una vez. <em>Presupuesta en minutos.</em></h1>
+      <p class="hero-sub">Cotiza convierte tus precios, rendimientos y trabajos frecuentes en presupuestos editables, ordenados y listos para imprimir. Sin ERP, sin aprender software complejo.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="app/index.html">Ver demo interactiva</a>
+        <a class="btn-ghost" href="manual.html" target="_blank">Manual de uso</a>
+      </div>
     </div>
-    <div class="hs-main">
-      <div class="hs-head">
-        <strong>Presupuestos recientes</strong>
-        <span>Mayo 2026</span>
+    <div class="hero-shot" aria-hidden="true">
+      <div class="hs-sidebar">
+        <div class="hs-logo">C</div>
+        <div class="hs-nav active">Presupuestos</div>
+        <div class="hs-nav">Precios</div>
+        <div class="hs-nav">Clientes</div>
+        <div class="hs-nav">Informes</div>
       </div>
-      <div class="hs-stats">
-        <div class="hs-stat"><small>Este mes</small><strong>7</strong></div>
-        <div class="hs-stat"><small>Aprobados</small><strong>3</strong></div>
-        <div class="hs-stat"><small>Total €</small><strong>9.4k</strong></div>
-      </div>
-      <div class="hs-rows">
-        <div class="hs-row ok">
-          <div class="hs-row-info"><strong>Reforma baño completo</strong><span>Pedro M. · Electricidad + alicatado</span></div>
-          <span class="hs-badge ok">Aprobado</span>
-          <span class="hs-amount">3.240€</span>
+      <div class="hs-main">
+        <div class="hs-head"><strong>Presupuestos recientes</strong><span>Mayo 2026</span></div>
+        <div class="hs-stats">
+          <div class="hs-stat"><small>Este mes</small><strong>7</strong></div>
+          <div class="hs-stat"><small>Aprobados</small><strong>3</strong></div>
+          <div class="hs-stat"><small>Total EUR</small><strong>9.4k</strong></div>
         </div>
-        <div class="hs-row sent">
-          <div class="hs-row-info"><strong>Pintura local comercial</strong><span>Bar Rincón · 120 m²</span></div>
-          <span class="hs-badge sent">Enviado</span>
-          <span class="hs-amount">890€</span>
-        </div>
-        <div class="hs-row pend">
-          <div class="hs-row-info"><strong>Suelo laminado vivienda</strong><span>Ana Ruiz · 85 m²</span></div>
-          <span class="hs-badge pend">Pendiente</span>
-          <span class="hs-amount">2.100€</span>
+        <div class="hs-rows">
+          <div class="hs-row ok"><div class="hs-row-info"><strong>Reforma bano completo</strong><span>Pedro M. - Electricidad + alicatado</span></div><span class="hs-badge ok">Aprobado</span><span class="hs-amount">3.240 EUR</span></div>
+          <div class="hs-row"><div class="hs-row-info"><strong>Pintura local comercial</strong><span>Bar Rincon - 120 m2</span></div><span class="hs-badge sent">Enviado</span><span class="hs-amount">890 EUR</span></div>
+          <div class="hs-row pend"><div class="hs-row-info"><strong>Suelo laminado vivienda</strong><span>Ana Ruiz - 85 m2</span></div><span class="hs-badge pend">Pendiente</span><span class="hs-amount">2.100 EUR</span></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="section" id="problema">
-  <div class="section-label">El problema</div>
-  <h2 class="section-title">Presupuestar desde cero consume demasiado tiempo</h2>
-  <p class="section-sub">La mayoría de autónomos y pymes de reformas siguen presupuestando con Excel, notas o documentos copiados. Cotiza ordena ese proceso.</p>
-  <div class="problema-grid">
-    <div class="problema-card"><div class="problema-icon">⏱️</div><h3>Cada presupuesto desde cero</h3><p>Sin base reutilizable, cada trabajo nuevo exige volver a calcular lo mismo.</p></div>
-    <div class="problema-card"><div class="problema-icon">❌</div><h3>Fácil olvidar partidas</h3><p>Materiales, horas extra, desplazamientos o margen que se escapan y reducen el beneficio.</p></div>
-    <div class="problema-card"><div class="problema-icon">📄</div><h3>Formato diferente en cada presupuesto</h3><p>Sin plantilla fija, el cliente recibe documentos distintos que no transmiten profesionalidad.</p></div>
-    <div class="problema-card"><div class="problema-icon">🧠</div><h3>Todo depende de la memoria</h3><p>Precios y rendimientos guardados en la cabeza, no en un sistema consultable y actualizable.</p></div>
-  </div>
-</section>
-
-<section class="section" id="como">
-  <div class="section-label">Cómo funciona</div>
-  <h2 class="section-title">Tu base de precios, tus reglas, tus presupuestos</h2>
-  <p class="section-sub">Cotiza no inventa los números por ti. Te ayuda a calcular una base confiable que puedes revisar y ajustar antes de enviar.</p>
-  <div class="como-funciona">
-    <div class="paso"><div class="paso-num">01</div><div><h3>Carga tu base de precios y rendimientos</h3><p>Materiales, horas, desplazamientos. Una sola vez, actualizable cuando cambien.</p></div></div>
-    <div class="paso"><div class="paso-num">02</div><div><h3>Crea trabajos tipo reutilizables</h3><p>Pintura de habitación, instalación eléctrica, reforma de baño — define los más frecuentes y duplícalos.</p></div></div>
-    <div class="paso"><div class="paso-num">03</div><div><h3>Genera el presupuesto y edítalo</h3><p>Desde los trabajos tipo, con líneas extras si hace falta. Añade datos del cliente, fecha y número.</p></div></div>
-    <div class="paso"><div class="paso-num">04</div><div><h3>Imprime o guarda como PDF</h3><p>Vista imprimible limpia, lista para enviar por email o WhatsApp.</p></div></div>
-  </div>
-</section>
-
-<section class="section" id="funciones">
-  <div class="section-label">Funciones</div>
-  <h2 class="section-title">Lo que incluye la versión actual</h2>
-  <div class="features-grid">
-    <div class="feature-card">
-      <h3>📋 Presupuestos</h3>
-      <ul>
-        <li>Generados desde trabajos tipo</li>
-        <li>Líneas manuales extra</li>
-        <li>Datos de cliente y obra</li>
-        <li>Estados: borrador, enviado, aceptado, rechazado</li>
-        <li>Vista imprimible para PDF</li>
-      </ul>
+  <section class="section" id="problema">
+    <div class="section-label">El problema</div>
+    <h2 class="section-title">Presupuestar desde cero consume demasiado tiempo</h2>
+    <p class="section-sub">La mayoria de autonomos y pymes de reformas siguen presupuestando con Excel, notas o documentos copiados. Cotiza ordena ese proceso.</p>
+    <div class="grid">
+      <div class="card"><h3>Cada presupuesto desde cero</h3><p>Sin base reutilizable, cada trabajo nuevo exige volver a calcular lo mismo.</p></div>
+      <div class="card"><h3>Facil olvidar partidas</h3><p>Materiales, horas extra, desplazamientos o margen pueden escaparse y reducir el beneficio.</p></div>
+      <div class="card"><h3>Formato diferente cada vez</h3><p>Una plantilla fija ayuda a que el cliente reciba documentos claros y profesionales.</p></div>
+      <div class="card"><h3>Todo depende de la memoria</h3><p>Precios y rendimientos quedan en un sistema consultable y actualizable.</p></div>
     </div>
-    <div class="feature-card">
-      <h3>🗂️ Base de datos propia</h3>
-      <ul>
-        <li>Precios de materiales y mano de obra</li>
-        <li>Rendimientos por unidad</li>
-        <li>Trabajos tipo editables y duplicables</li>
-        <li>Backup exportable en JSON</li>
-        <li>Importación para restaurar</li>
-      </ul>
+  </section>
+
+  <section class="section" id="como">
+    <div class="section-label">Como funciona</div>
+    <h2 class="section-title">Tu base de precios, tus reglas, tus presupuestos</h2>
+    <p class="section-sub">Cotiza no inventa los numeros por ti. Calcula una base confiable con tu informacion y te deja revisarla antes de enviar.</p>
+    <div class="grid">
+      <div class="card"><h3>1. Carga precios</h3><p>Materiales, horas, desplazamientos y extras habituales.</p></div>
+      <div class="card"><h3>2. Define trabajos tipo</h3><p>Pintura, fontaneria, suelo, electricidad o tus servicios frecuentes.</p></div>
+      <div class="card"><h3>3. Genera y edita</h3><p>Calcula una base, ajusta partidas y agrega lineas manuales.</p></div>
+      <div class="card"><h3>4. Imprime o guarda PDF</h3><p>Obtienes una vista limpia para compartir con el cliente.</p></div>
     </div>
-    <div class="feature-card">
-      <h3>📊 Historial y seguimiento</h3>
-      <ul>
-        <li>Historial de presupuestos con búsqueda</li>
-        <li>Filtro por estado comercial</li>
-        <li>Resumen de aceptados, enviados, pendientes</li>
-        <li>Número de presupuesto automático</li>
-        <li>Fecha de validez configurable</li>
-      </ul>
+  </section>
+
+  <section class="section" id="precios">
+    <div class="section-label">Precios</div>
+    <h2 class="section-title">Sencillo y sin sorpresas</h2>
+    <p class="section-sub">Un setup inicial para cargar tu base y una mensualidad baja para mantener el sistema activo.</p>
+    <div class="grid">
+      <div class="price-card">
+        <div class="price-name">Autonomo</div>
+        <div class="price-amount">19 EUR <span>/mes</span></div>
+        <p class="price-desc">Para profesionales independientes que presupuestan solos.</p>
+        <ul class="price-features">
+          <li>Presupuestos ilimitados</li>
+          <li>Base de precios propia</li>
+          <li>Trabajos tipo reutilizables</li>
+          <li>Vista imprimible a PDF</li>
+          <li>Backup exportable</li>
+        </ul>
+        <a class="price-cta" href="mailto:hola@impulsdigital.es?subject=Cotiza Autonomo">Solicitar demo</a>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Pyme</div>
+        <div class="price-amount">29 EUR <span>/mes</span></div>
+        <p class="price-desc">Para empresas pequenas con mas volumen de presupuestos.</p>
+        <ul class="price-features">
+          <li>Todo lo del plan Autonomo</li>
+          <li>Historial con filtros</li>
+          <li>Resumen comercial por estado</li>
+          <li>Setup asistido incluido</li>
+          <li>Soporte prioritario</li>
+        </ul>
+        <a class="price-cta" href="mailto:hola@impulsdigital.es?subject=Cotiza Pyme">Solicitar demo</a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="section">
-  <div class="section-label">¿Para quién?</div>
-  <h2 class="section-title">Pensado para oficios reales, no grandes empresas</h2>
-  <div class="para-quien">
-    <div class="quien-card"><span>🖌️</span>Pintores</div>
-    <div class="quien-card"><span>⚡</span>Electricistas</div>
-    <div class="quien-card"><span>🔧</span>Fontaneros</div>
-    <div class="quien-card"><span>🪵</span>Carpinteros</div>
-    <div class="quien-card"><span>🏗️</span>Reformas</div>
-    <div class="quien-card"><span>🔩</span>Instaladores</div>
-  </div>
-</section>
+  <section class="cta-section">
+    <h2>Cuanto tiempo pierdes en cada presupuesto?</h2>
+    <p>Prueba la demo y carga tu primera base de precios en menos de 10 minutos.</p>
+    <a class="btn-primary" href="app/index.html">Abrir demo ahora</a>
+  </section>
 
-<section class="section" id="precios">
-  <div class="section-label">Precios</div>
-  <h2 class="section-title">Sencillo y sin sorpresas</h2>
-  <p class="section-sub">Un setup inicial para cargar tu base de precios y trabajos tipo, y una mensualidad baja para mantenerlo activo.</p>
-  <div class="pricing-cards">
-    <div class="price-card">
-      <div class="price-name">Autónomo</div>
-      <div class="price-amount">19€ <span>/mes</span></div>
-      <div class="price-desc">Para profesionales independientes que presupuestan solos.</div>
-      <ul class="price-features">
-        <li>Presupuestos ilimitados</li>
-        <li>Base de precios propia</li>
-        <li>Trabajos tipo reutilizables</li>
-        <li>Vista imprimible a PDF</li>
-        <li>Backup exportable</li>
-      </ul>
-      <a class="price-cta ghost" href="mailto:hola@impulsdigital.es?subject=Cotiza Autónomo">Solicitar demo</a>
-    </div>
-    <div class="price-card featured">
-      <div class="price-name">Pyme <span class="badge-pop">Popular</span></div>
-      <div class="price-amount">29€ <span>/mes</span></div>
-      <div class="price-desc">Para empresas pequeñas con varios técnicos y más volumen de presupuestos.</div>
-      <ul class="price-features">
-        <li>Todo lo del plan Autónomo</li>
-        <li>Historial avanzado con filtros</li>
-        <li>Resumen comercial por estado</li>
-        <li>Setup asistido incluido</li>
-        <li>Soporte prioritario</li>
-      </ul>
-      <a class="price-cta" href="mailto:hola@impulsdigital.es?subject=Cotiza Pyme">Solicitar demo</a>
-    </div>
-  </div>
-</section>
-
-<section class="cta-section">
-  <h2>¿Cuánto tiempo pierdes en cada presupuesto?</h2>
-  <p>Prueba la demo y carga tu primera base de precios en menos de 10 minutos.</p>
-  <a href="app/index.html">Abrir demo ahora</a>
-</section>
-
-<footer>
-  <p>Cotiza · Desarrollado por <a href="https://impulsdigital.es">Impuls Digital</a> &nbsp;·&nbsp; <a href="app/index.html">Abrir demo</a> &nbsp;·&nbsp; <a href="manual.html">Manual de uso</a></p>
-</footer>
-
+  <footer>
+    <p>Cotiza - Desarrollado por <a href="https://impulsdigital.es">Impuls Digital</a> - <a href="app/index.html">Abrir demo</a> - <a href="manual.html">Manual de uso</a></p>
+  </footer>
 </body>
 </html>

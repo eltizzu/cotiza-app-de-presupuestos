@@ -38,6 +38,7 @@
 - [x] Confirmacion antes de quitar lineas del presupuesto.
 - [x] Reordenar lineas de presupuesto.
 - [x] Demo inicial con calculo de subtotal, margen, impuestos y total.
+- [x] Explicacion visible de las formulas usadas para crear el presupuesto base.
 - [x] Demo inicial con notas visibles para cliente.
 - [x] Vista imprimible desde el navegador con datos de cliente.
 - [x] Condiciones comerciales basicas en impresion.
@@ -48,14 +49,20 @@
 - [x] Logo visible en cabecera de la app.
 - [x] Logo visible en impresion si el usuario no cargo logo propio.
 - [x] Guia rapida dentro de la app para probar la demo sin explicacion externa.
+- [x] Ayuda simple en plantillas para empezar duplicando ejemplos sin agregar un asistente pesado.
 - [x] Ajustes responsive para pantallas moviles.
 - [x] Persistencia local de la demo en el navegador.
+- [x] Login inicial con Supabase.
+- [x] Sincronizacion de settings, precios, rendimientos, plantillas y presupuestos cuando hay sesion.
+- [x] Fallback local sin login conservado.
+- [x] Pruebas automatizadas para mapeo de Supabase y operaciones principales de sync.
 - [x] Documentacion viva actualizada con la primera demo.
 
 ## Calidad minima esperada
 
 - [x] El usuario puede crear su primer presupuesto sin cargar un catalogo enorme.
 - [x] Los calculos son visibles y entendibles en la demo.
+- [x] La app explica la carga de precios, consumos y plantillas con ayudas en pantalla.
 - [x] Los importes pueden editarse manualmente.
 - [x] La interfaz evita lenguaje tecnico innecesario.
 - [x] No hay modulos que distraigan del presupuesto.
