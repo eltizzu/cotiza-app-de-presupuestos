@@ -79,9 +79,14 @@
       sb.auth.onAuthStateChange(async (event, session) => {
         if (event === "SIGNED_IN" && session) {
           this.user = session.user;
-          await this._loadBusiness();
-          this._showApp();
-          await this._refreshCloudData();
+          try {
+            await this._loadBusiness();
+            this._showApp();
+            await this._refreshCloudData();
+          } catch (err) {
+            console.error("Error al cargar datos de la nube:", err);
+            this._showApp();
+          }
         } else if (event === "SIGNED_OUT") {
           this.user = null;
           this.businessId = null;
