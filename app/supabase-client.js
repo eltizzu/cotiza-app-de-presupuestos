@@ -69,9 +69,14 @@
 
       if (session) {
         this.user = session.user;
-        await this._loadBusiness();
-        this._showApp();
-        await this._refreshCloudData();
+        try {
+          await this._loadBusiness();
+          this._showApp();
+          await this._refreshCloudData();
+        } catch (err) {
+          console.error("Error cargando negocio en init():", err);
+          this._showApp();
+        }
       } else {
         this._showLocalMode();
       }
