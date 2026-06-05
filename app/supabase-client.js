@@ -125,13 +125,16 @@
 
     async _loadBusiness() {
       this.isNewBusiness = false;
-      const { data, error } = await sb
+      const { data: rows, error } = await sb
         .from("businesses")
         .select("id")
         .eq("owner_id", this.user.id)
-        .maybeSingle();
+        .order("created_at", { ascending: true })
+        .limit(1);
 
       if (error) throw error;
+
+      const data = rows?.[0] ?? null;
 
       if (data) {
         this.businessId = data.id;
