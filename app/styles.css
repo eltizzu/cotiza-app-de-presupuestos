@@ -818,12 +818,32 @@ td input {
 
   .sidebar {
     padding: 12px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 6px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
   }
 
   .nav-button {
-    min-width: 132px;
+    min-width: 110px;
     min-height: 40px;
     padding: 9px 10px;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    margin-bottom: 0;
   }
 
   .entry-form,
