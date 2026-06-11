@@ -52,6 +52,8 @@
     <main class="layout">
       <aside class="sidebar" aria-label="Modulos">
         <button class="nav-button active" data-section="setup">Inicio</button>
+        <button class="nav-button" data-section="dashboard">Dashboard</button>
+        <button class="nav-button" data-section="clients">Clientes</button>
         <button class="nav-button" data-section="prices">Precios</button>
         <button class="nav-button" data-section="rules">Consumos y tiempos</button>
         <button class="nav-button" data-section="templates">Plantillas</button>
@@ -136,6 +138,94 @@
             Cotiza es una demo de calculo y organizacion de presupuestos. Revisa siempre precios, cantidades,
             impuestos, condiciones y alcance antes de usar o enviar un presupuesto. No sustituye asesoramiento
             fiscal, legal ni tecnico.
+          </div>
+        </section>
+
+        <section class="panel" id="dashboard">
+          <div class="section-heading">
+            <p class="eyebrow">Métricas</p>
+            <h2>Dashboard de Cotiza</h2>
+          </div>
+          <div class="assist-panel">
+            <strong>Lectura rápida del negocio</strong>
+            <p>Estas métricas salen de los presupuestos guardados. Si estás en modo local, se calculan con este navegador. Si conectás la nube, se calculan con Supabase.</p>
+          </div>
+          <div class="dashboard-toolbar">
+            <label>
+              Período
+              <select id="dashboardPeriod">
+                <option value="week">Esta semana</option>
+                <option value="month" selected>Este mes</option>
+                <option value="quarter">Últimos 3 meses</option>
+              </select>
+            </label>
+          </div>
+          <div class="metrics-grid" id="dashboardMetrics"></div>
+          <div class="chart-grid">
+            <section class="chart-panel">
+              <div class="compact-heading">
+                <p class="eyebrow">Estados</p>
+                <h2>Presupuestos por estado</h2>
+              </div>
+              <canvas id="statusChart" height="220"></canvas>
+            </section>
+            <section class="chart-panel">
+              <div class="compact-heading">
+                <p class="eyebrow">Clientes</p>
+                <h2>Top por volumen</h2>
+              </div>
+              <canvas id="clientsChart" height="220"></canvas>
+            </section>
+          </div>
+          <div class="turnia-note">
+            <strong>Turnia</strong>
+            <p>La estructura de dashboard queda preparada, pero las métricas de citas necesitan tablas de citas y servicios antes de calcularse con datos reales.</p>
+          </div>
+        </section>
+
+        <section class="panel" id="clients">
+          <div class="section-heading">
+            <p class="eyebrow">Base comercial</p>
+            <h2>Clientes</h2>
+          </div>
+          <div class="assist-panel">
+            <strong>Clientes detectados automáticamente</strong>
+            <p>Cotiza arma esta base desde los presupuestos guardados. Al guardar un presupuesto en la nube, también crea o vincula el cliente en Supabase.</p>
+          </div>
+          <div class="history-filters">
+            <label>
+              Buscar cliente
+              <input id="clientSearch" placeholder="Nombre o teléfono" />
+            </label>
+            <label>
+              Orden
+              <select id="clientSort">
+                <option value="volume">Mayor volumen</option>
+                <option value="recent">Más reciente</option>
+                <option value="name">Nombre</option>
+              </select>
+            </label>
+          </div>
+          <div class="client-layout">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cliente</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Primer contacto</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="clientsTable"></tbody>
+              </table>
+            </div>
+            <aside class="client-detail" id="clientDetail">
+              <p class="eyebrow">Historial</p>
+              <h2>Seleccioná un cliente</h2>
+              <p>Al elegirlo vas a ver sus presupuestos, estados e importes.</p>
+            </aside>
           </div>
         </section>
 
@@ -458,13 +548,18 @@
 
     <section class="print-sheet" id="printSheet" aria-label="Presupuesto imprimible"></section>
 
+    <script src="https://browser.sentry-cdn.com/8.30.0/bundle.min.js" crossorigin="anonymous"></script>
+    <script src="./config.js"></script>
+    <script src="./monitoring.js"></script>
     <script src="./core.js"></script>
     <script src="./state.js"></script>
     <script src="./render.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="./dashboard.js"></script>
+    <script src="./clients.js"></script>
     <script src="./actions.js"></script>
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-    <script src="./config.js"></script>
     <script src="./supabase-sync.js"></script>
     <script src="./supabase-client.js"></script>
   </body>

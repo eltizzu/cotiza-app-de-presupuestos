@@ -32,6 +32,55 @@
     return maxNumber + 1;
   }
 
+  function periodStart(period) {
+    const now = new Date();
+    const start = new Date(now);
+    start.setHours(0, 0, 0, 0);
+    if (period === "week") {
+      const day = start.getDay() || 7;
+      start.setDate(start.getDate() - day + 1);
+    } else if (period === "quarter") {
+      start.setMonth(start.getMonth() - 3);
+    } else {
+      start.setDate(1);
+    }
+    return start.toISOString().slice(0, 10);
+  }
+
+  function buildMetricsFromQuoteRows(quoteRows) {
+    const statusCounts = { draft: 0, sent: 0, accepted: 0, rejected: 0 };
+    const clients = new Map();
+    let totalAmount = 0;
+
+    (quoteRows || []).forEach((quote) => {
+      const status = quote.status || "draft";
+      const total = numberOrZero(quote.grand_total);
+      const clientName = String(quote.client_name || "Sin cliente").trim() || "Sin cliente";
+      statusCounts[status] = (statusCounts[status] || 0) + 1;
+      totalAmount += total;
+      const current = clients.get(clientName) || { name: clientName, total: 0, count: 0 };
+      current.total += total;
+      current.count += 1;
+      clients.set(clientName, current);
+    });
+
+    const totalQuotes = quoteRows?.length || 0;
+    const pending = (statusCounts.draft || 0) + (statusCounts.sent || 0);
+    return {
+      totalQuotes,
+      totalAmount,
+      statusCounts,
+      rates: {
+        draft: totalQuotes ? Math.round(((statusCounts.draft || 0) / totalQuotes) * 100) : 0,
+        sent: totalQuotes ? Math.round(((statusCounts.sent || 0) / totalQuotes) * 100) : 0,
+        accepted: totalQuotes ? Math.round(((statusCounts.accepted || 0) / totalQuotes) * 100) : 0,
+        rejected: totalQuotes ? Math.round(((statusCounts.rejected || 0) / totalQuotes) * 100) : 0,
+        pending: totalQuotes ? Math.round((pending / totalQuotes) * 100) : 0,
+      },
+      topClients: [...clients.values()].sort((a, b) => b.total - a.total).slice(0, 5),
+    };
+  }
+
   async function findByName(table, name) {
     if (!name) return null;
     return withError(
@@ -48,6 +97,19 @@
   async function idByName(table, name) {
     const row = await findByName(table, name);
     return row?.id || null;
+  }
+
+  async function findClientByName(name) {
+    if (!name) return null;
+    return withError(
+      await window.sb
+        .from("clients")
+        .select("*")
+        .eq("business_id", getBusinessId())
+        .eq("name", name)
+        .maybeSingle(),
+      "Buscar cliente"
+    );
   }
 
   const CotizaSync = {
@@ -145,6 +207,8 @@
 
       window.Cotiza?.saveState?.();
       window.CotizaRender?.renderAll?.();
+      window.CotizaDashboard?.refresh?.();
+      window.CotizaClients?.refresh?.();
     },
 
     async saveAllLocal() {
@@ -171,6 +235,95 @@
       };
       if (nextQuoteNumber) payload.next_quote_number = nextQuoteNumber;
       withError(await window.sb.from("businesses").update(payload).eq("id", getBusinessId()), "Guardar negocio");
+    },
+
+    async getDashboardMetrics(period = "month") {
+      if (!isEnabled()) return null;
+      const businessId = getBusinessId();
+      const start = periodStart(period);
+      const rows = withError(
+        await window.sb
+          .from("quotes")
+          .select("number, client_name, quote_date, status, grand_total")
+          .eq("business_id", businessId)
+          .gte("quote_date", start)
+          .order("quote_date", { ascending: true }),
+        "Cargar metricas"
+      );
+      return buildMetricsFromQuoteRows(rows || []);
+    },
+
+    async getClientsWithQuoteStats() {
+      if (!isEnabled()) return [];
+      const businessId = getBusinessId();
+      const [clientsRes, quotesRes] = await Promise.all([
+        window.sb.from("clients").select("*").eq("business_id", businessId).order("name"),
+        window.sb
+          .from("quotes")
+          .select("*, quote_lines(*)")
+          .eq("business_id", businessId)
+          .order("quote_date", { ascending: false }),
+      ]);
+      const clients = withError(clientsRes, "Cargar clientes") || [];
+      const quotes = withError(quotesRes, "Cargar historial de clientes") || [];
+      const clientById = new Map(clients.map((client) => [client.id, client]));
+      const grouped = new Map();
+
+      function ensureGroup(client, fallbackName) {
+        const name = String(client?.name || fallbackName || "Sin cliente").trim() || "Sin cliente";
+        const key = (client?.id || name).toLowerCase();
+        if (!grouped.has(key)) {
+          grouped.set(key, {
+            key,
+            id: client?.id || null,
+            name,
+            phone: client?.phone || "",
+            email: client?.email || "",
+            firstContact: "",
+            lastContact: "",
+            quoteCount: 0,
+            totalAmount: 0,
+            quotes: [],
+          });
+        }
+        return grouped.get(key);
+      }
+
+      clients.forEach((client) => ensureGroup(client, client.name));
+      quotes.forEach((quote) => {
+        const client = quote.client_id ? clientById.get(quote.client_id) : null;
+        const group = ensureGroup(client, quote.client_name);
+        const mapped = window.Cotiza.core.mapSupabaseQuoteRows([quote])[0];
+        const date = quote.quote_date || "";
+        group.quoteCount += 1;
+        group.totalAmount += numberOrZero(quote.grand_total);
+        if (date && (!group.firstContact || date < group.firstContact)) group.firstContact = date;
+        if (date && (!group.lastContact || date > group.lastContact)) group.lastContact = date;
+        if (mapped) group.quotes.push(mapped);
+      });
+
+      return [...grouped.values()];
+    },
+
+    async ensureClientFromQuote(savedQuote) {
+      if (!isEnabled()) return null;
+      const name = String(savedQuote?.quote?.client || "").trim();
+      if (!name) return null;
+      const existing = await findClientByName(name);
+      if (existing) return existing.id;
+      const created = withError(
+        await window.sb
+          .from("clients")
+          .insert({
+            business_id: getBusinessId(),
+            name,
+            address: savedQuote?.quote?.address || "",
+          })
+          .select("id")
+          .single(),
+        "Crear cliente"
+      );
+      return created?.id || null;
     },
 
     async upsertPrice(price, previousName) {
@@ -309,8 +462,10 @@
 
     async saveQuote(savedQuote, nextQuoteNumber) {
       if (!isEnabled() || !savedQuote?.quote?.number) return;
+      const clientId = await this.ensureClientFromQuote(savedQuote);
       const quotePayload = {
         business_id: getBusinessId(),
+        client_id: clientId,
         number: savedQuote.quote.number,
         client_name: savedQuote.quote.client || "",
         work_address: savedQuote.quote.address || "",

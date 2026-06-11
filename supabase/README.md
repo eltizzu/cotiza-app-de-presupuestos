@@ -28,6 +28,14 @@ El esquema crea:
 
 Tambien activa Row Level Security para que cada usuario vea solo los datos de sus negocios.
 
+Indice recomendado para dashboard:
+
+```sql
+create index if not exists idx_quotes_business_date on public.quotes(business_id, quote_date desc);
+```
+
+Este indice acelera las metricas por periodo del dashboard, que filtran presupuestos por negocio y fecha.
+
 ## 3. Configurar autenticacion
 
 Para una primera version simple:
@@ -39,12 +47,16 @@ Para una primera version simple:
 
 ## 4. Variables esperadas
 
-Copia `.env.example` a `.env.local` cuando exista una app con build tooling.
+Copia `.env.example` a `.env.local` para desarrollo con `vercel dev`, o cargalas como Environment Variables en Vercel.
 
-La demo HTML actual no lee `.env.local` directamente. Cuando migremos a app con bundler o framework, usara:
+La app no guarda estos valores reales en `app/config.js`. El navegador pide `/api/config`, y ese endpoint lee:
 
 - `SUPABASE_URL`
 - `SUPABASE_ANON_KEY`
+- `SENTRY_DSN`, opcional para monitoreo de errores.
+- `SENTRY_ENVIRONMENT`, opcional para separar errores por entorno.
+
+Si `/api/config` no esta disponible, Cotiza cae a modo local sin nube.
 
 ## 5. Proximo paso tecnico
 

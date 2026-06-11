@@ -332,3 +332,21 @@ Decision de producto:
 - La impresion debe usar la fecha guardada del presupuesto, no siempre la fecha actual.
 - El estado comercial ayuda internamente, pero no se muestra en la impresion para cliente.
 - Las condiciones comerciales impresas deben ser simples y editables en una etapa posterior.
+
+## 2026-06-10 - Dashboard y clientes desde presupuestos
+
+Se agrego una primera capa comercial sin convertir Cotiza en un CRM pesado:
+
+- Dashboard de Cotiza con total de presupuestos, monto presupuestado, estados y principales clientes.
+- Filtro simple por periodo: esta semana, este mes y ultimos 3 meses.
+- Graficos basicos con Chart.js.
+- Seccion "Clientes" generada automaticamente desde presupuestos guardados.
+- En Supabase, al guardar un presupuesto se crea o vincula el cliente usando la tabla `clients` existente.
+- Sin login, Dashboard y Clientes siguen funcionando con los presupuestos locales del navegador.
+
+Decision de producto:
+
+- Clientes no se carga manualmente en esta etapa para no agregar friccion inicial.
+- El dashboard se limita a metricas accionables para validar valor: volumen, estado y clientes.
+- Turnia queda solo como estructura conceptual hasta tener tablas reales de citas, servicios, estados y horarios.
+- No se agrega infraestructura extra antes de validar si estas metricas ayudan al usuario a entender mejor su negocio.

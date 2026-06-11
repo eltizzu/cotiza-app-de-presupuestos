@@ -117,6 +117,7 @@ create index if not exists templates_business_id_idx on public.templates(busines
 create index if not exists template_lines_template_id_idx on public.template_lines(template_id);
 create index if not exists clients_business_id_idx on public.clients(business_id);
 create index if not exists quotes_business_id_status_idx on public.quotes(business_id, status);
+create index if not exists idx_quotes_business_date on public.quotes(business_id, quote_date desc);
 create index if not exists quote_lines_quote_id_idx on public.quote_lines(quote_id);
 
 create or replace function public.set_updated_at()

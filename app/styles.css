@@ -399,6 +399,28 @@ h2 {
   margin-bottom: 16px;
 }
 
+.dashboard-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 18px;
+}
+
+.dashboard-toolbar label {
+  min-width: 220px;
+}
+
+.metrics-grid,
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.chart-grid {
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+}
+
 .summary-item {
   padding: 12px;
   border: 1px solid var(--line);
@@ -419,6 +441,96 @@ h2 {
   margin-top: 6px;
   font-size: 18px;
   color: var(--accent);
+}
+
+.chart-panel,
+.turnia-note,
+.client-detail {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.chart-panel canvas {
+  max-width: 100%;
+}
+
+.turnia-note {
+  background: var(--soft);
+}
+
+.turnia-note strong,
+.client-detail strong {
+  color: var(--accent);
+}
+
+.turnia-note p,
+.client-detail p {
+  margin-top: 6px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.client-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+  gap: 18px;
+  align-items: start;
+}
+
+.client-row {
+  cursor: pointer;
+}
+
+.client-row:hover,
+.client-row.active {
+  background: var(--soft);
+}
+
+.client-history {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.client-history-item {
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--soft);
+}
+
+.client-history-item span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.client-history-lines {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.client-history-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+}
+
+.client-history-line span:first-child {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.client-history-empty {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
 }
 
 .status-pill {
@@ -768,6 +880,8 @@ td input {
   .test-guide,
   .starter-help,
   .explanation-grid,
+  .chart-grid,
+  .client-layout,
   .budget-footer {
     grid-template-columns: 1fr;
   }
@@ -790,8 +904,17 @@ td input {
   .manual-line,
   .history-filters,
   .commercial-summary,
+  .metrics-grid,
   .template-list {
     grid-template-columns: 1fr;
+  }
+
+  .dashboard-toolbar {
+    justify-content: stretch;
+  }
+
+  .dashboard-toolbar label {
+    width: 100%;
   }
 
   .content {
@@ -850,6 +973,8 @@ td input {
   .backup-panel,
   .test-guide,
   .saved-quotes,
+  .chart-panel,
+  .client-detail,
   .totals,
   .manual-line {
     padding: 14px;

@@ -24,6 +24,8 @@ La IA debe ser asistente, no autoridad.
 - Seguimiento de clientes.
 - Recordatorios de seguimiento.
 - Versiones de presupuesto.
+- Ficha de cliente mas completa solo si la prueba demuestra que aporta valor.
+- Metricas por oficio, origen de cliente y tasa de aceptacion cuando haya volumen real.
 
 ### Operacion
 
@@ -31,6 +33,7 @@ La IA debe ser asistente, no autoridad.
 - Control basico de obra.
 - Partes de trabajo.
 - Rentabilidad real vs estimada.
+- Para Turnia, crear tablas de citas, servicios, estados y horarios antes de calcular metricas reales.
 
 ### Documentos
 

@@ -1,6 +1,29 @@
-// Cotiza — Supabase config
-// Publishable key: safe to expose in frontend (RLS is enabled)
-// Never put the secret key here.
+// Cotiza - runtime config loader
+// Deployed values come from /api/config. Keep real values out of this file.
 
-const SUPABASE_URL = 'https://pszjetkmuajjiwrrlunn.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_wu6_qaOYQceQq1Wx6n69Nw_k6b6FpRq';
+(function () {
+  let configPromise = null;
+
+  async function loadConfig() {
+    if (configPromise) return configPromise;
+    configPromise = fetchConfig();
+    return configPromise;
+  }
+
+  async function fetchConfig() {
+    try {
+      const response = await fetch("/api/config", { cache: "no-store" });
+      if (!response.ok) throw new Error("Config no disponible");
+      return await response.json();
+    } catch {
+      return {
+        SUPABASE_URL: "",
+        SUPABASE_ANON_KEY: "",
+        SENTRY_DSN: "",
+        SENTRY_ENVIRONMENT: "local",
+      };
+    }
+  }
+
+  window.CotizaConfig = { loadConfig };
+})();

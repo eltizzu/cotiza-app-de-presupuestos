@@ -24,6 +24,10 @@
 - [x] Busqueda en historial.
 - [x] Filtro por estado en historial.
 - [x] Resumen comercial simple por estado.
+- [x] Dashboard de Cotiza con metricas por periodo.
+- [x] Graficos simples para estados y principales clientes.
+- [x] Base de clientes detectada automaticamente desde presupuestos.
+- [x] Busqueda y detalle de historial por cliente.
 - [x] Normalizacion basica de datos guardados antiguos.
 - [x] Proteccion basica de textos ingresados por el usuario al mostrarlos en HTML.
 - [x] Separacion inicial de datos/utilidades en `state.js`.
@@ -54,6 +58,8 @@
 - [x] Persistencia local de la demo en el navegador.
 - [x] Login inicial con Supabase.
 - [x] Sincronizacion de settings, precios, rendimientos, plantillas y presupuestos cuando hay sesion.
+- [x] Creacion o vinculacion automatica de clientes en Supabase al guardar presupuestos.
+- [x] Consultas de dashboard y clientes filtradas por negocio del usuario.
 - [x] Fallback local sin login conservado.
 - [x] Pruebas automatizadas para mapeo de Supabase y operaciones principales de sync.
 - [x] Documentacion viva actualizada con la primera demo.
@@ -85,6 +91,8 @@
 - [x] Cambiar estado.
 - [x] Buscar y filtrar historial.
 - [x] Ver resumen comercial.
+- [x] Revisar dashboard por semana, mes o ultimos 3 meses.
+- [x] Buscar cliente y abrir historial.
 - [x] Exportar backup.
 - [x] Importar backup con confirmacion.
 - [x] Imprimir o guardar PDF desde navegador.
@@ -110,3 +118,4 @@
 - [ ] IA autonoma.
 - [ ] Importadores avanzados.
 - [ ] App movil nativa.
+- [ ] Metricas reales de Turnia hasta crear tablas de citas, servicios y estados.

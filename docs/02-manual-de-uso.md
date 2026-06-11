@@ -12,13 +12,15 @@ Cotiza no inventa precios ni decide por el usuario. Calcula una base usando la i
 
 ## Como Esta Organizada La App
 
-La demo tiene cinco secciones principales:
+La demo tiene siete secciones principales:
 
 - Inicio.
 - Precios.
 - Consumos y tiempos.
 - Plantillas de trabajos.
 - Presupuesto.
+- Dashboard.
+- Clientes.
 
 Conviene usarlas en ese orden la primera vez.
 
@@ -295,7 +297,64 @@ El resumen comercial muestra:
 
 Sin sesion, este historial es local del navegador. Con sesion iniciada, los presupuestos guardados tambien se sincronizan con Supabase.
 
-## 7. Imprimir O Guardar PDF
+## 7. Dashboard
+
+En "Dashboard" se ven metricas simples de los presupuestos guardados.
+
+Sirve para responder rapidamente:
+
+- Cuantos presupuestos se hicieron en el periodo.
+- Cuanto monto total se presupuesto.
+- Que porcentaje esta pendiente, aceptado o rechazado.
+- Que clientes concentran mas volumen.
+
+El filtro de periodo permite revisar:
+
+- Esta semana.
+- Este mes.
+- Ultimos 3 meses.
+
+Los graficos muestran:
+
+- Presupuestos por estado.
+- Principales clientes por volumen presupuestado.
+
+Importante:
+
+- En modo local, el dashboard usa los presupuestos guardados en este navegador.
+- Con sesion iniciada, el dashboard consulta los presupuestos guardados en Supabase para el negocio del usuario.
+- Si no hay presupuestos guardados, el dashboard queda vacio hasta que se guarde al menos uno.
+
+Turnia queda solo como estructura conceptual dentro de esta etapa. Las metricas reales de citas necesitan tablas propias de citas y servicios, por eso no se calculan todavia.
+
+## 8. Clientes
+
+En "Clientes" se arma una base simple a partir de los presupuestos guardados.
+
+No hace falta cargar clientes a mano en esta etapa. Cotiza detecta el nombre del cliente desde cada presupuesto y muestra:
+
+- Nombre.
+- Telefono y email, si existen.
+- Fecha de primer contacto.
+- Cantidad de presupuestos.
+- Volumen total presupuestado.
+
+Tambien se puede:
+
+- Buscar por nombre o telefono.
+- Ordenar por volumen, fecha o nombre.
+- Abrir un cliente para ver su historial de presupuestos.
+- Revisar las partidas de cada presupuesto dentro del historial del cliente.
+
+Con sesion iniciada, al guardar un presupuesto Cotiza crea o vincula automaticamente el cliente en la tabla `clients` de Supabase. Para evitar duplicados, primero busca un cliente del mismo negocio con el mismo nombre. Sin sesion, la base de clientes se arma desde los presupuestos locales del navegador.
+
+Primer paso recomendado:
+
+- Guardar dos o tres presupuestos de ejemplo con clientes distintos.
+- Entrar a "Clientes".
+- Buscar un cliente y revisar su historial.
+
+## 9. Imprimir O Guardar PDF
 
 El boton "Imprimir / Guardar PDF" abre la impresion del navegador.
 
@@ -432,7 +491,24 @@ Si no avanza:
 
 - Rechazado.
 
-### Paso 8: Imprimir O Guardar PDF
+### Paso 8: Revisar Dashboard
+
+Ir a "Dashboard" y comprobar:
+
+- Total de presupuestos del periodo.
+- Monto total presupuestado.
+- Estados.
+- Top clientes.
+
+Si no aparece informacion, revisar que el presupuesto este guardado y que el filtro de periodo incluya la fecha del presupuesto.
+
+### Paso 9: Revisar Clientes
+
+Ir a "Clientes".
+
+Buscar el cliente del presupuesto guardado y abrir su detalle para ver el historial.
+
+### Paso 10: Imprimir O Guardar PDF
 
 Pulsar "Imprimir / Guardar PDF".
 
@@ -444,6 +520,7 @@ Revisar la vista de impresion y guardar el PDF desde el navegador.
 - Mantener precios actualizados.
 - Ajustar consumos y tiempos segun experiencia real.
 - Usar plantillas como base, no como verdad absoluta.
+- Revisar Dashboard y Clientes despues de guardar presupuestos para detectar si la informacion comercial queda clara.
 - Exportar backup si se cargaron datos importantes.
 - No usar la demo como sistema fiscal, contable o legal.
 - Imprimir solo despues de revisar el resultado final.
@@ -453,6 +530,9 @@ Revisar la vista de impresion y guardar el PDF desde el navegador.
 - Los datos se guardan en el navegador.
 - Hay login inicial con Supabase, pero todavia no hay roles avanzados ni panel de administracion.
 - Sin login, la demo sigue usando almacenamiento local.
+- Clientes se detecta desde presupuestos; todavia no es un CRM completo.
+- Dashboard muestra metricas comerciales basicas, no analitica avanzada.
+- Turnia no tiene metricas reales hasta que existan tablas de citas y servicios.
 - No hay facturacion.
 - No hay contabilidad.
 - No hay control de obra.

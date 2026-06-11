@@ -25,8 +25,14 @@ function showToast(message, type = "success") {
 function syncWhenLogged(task) {
   if (!window.CotizaSync?.isEnabled?.()) return;
   task(window.CotizaSync).catch((error) => {
+    window.CotizaMonitoring?.captureException?.(error, { area: "sync" });
     showToast(`No se pudo sincronizar con la nube: ${error.message}`, "error");
   });
+}
+
+function refreshInsights() {
+  window.CotizaDashboard?.refresh?.();
+  window.CotizaClients?.refresh?.();
 }
 
 function inputValueForVariable(variable) {
@@ -141,7 +147,8 @@ function saveCurrentQuote() {
 
   render.renderSavedQuotes();
   saveState();
-  syncWhenLogged((sync) => sync.saveQuote(savedQuote, state.nextQuoteNumber));
+  syncWhenLogged((sync) => sync.saveQuote(savedQuote, state.nextQuoteNumber).then(refreshInsights));
+  refreshInsights();
   showToast(existingIndex >= 0 ? "Presupuesto actualizado." : "Presupuesto guardado.");
 }
 
@@ -164,7 +171,8 @@ function deleteSavedQuote(id) {
   state.savedQuotes = state.savedQuotes.filter((quote) => quote.id !== id);
   render.renderSavedQuotes();
   saveState();
-  syncWhenLogged((sync) => sync.deleteQuote(savedQuote?.quote?.number));
+  syncWhenLogged((sync) => sync.deleteQuote(savedQuote?.quote?.number).then(refreshInsights));
+  refreshInsights();
   showToast("Presupuesto eliminado.");
 }
 
@@ -238,7 +246,8 @@ function updateSavedQuoteStatus(id, status) {
   }
   render.renderSavedQuotes();
   saveState();
-  syncWhenLogged((sync) => sync.saveQuote(savedQuote, state.nextQuoteNumber));
+  syncWhenLogged((sync) => sync.saveQuote(savedQuote, state.nextQuoteNumber).then(refreshInsights));
+  refreshInsights();
 }
 
 function updateHistoryFilters() {
@@ -292,7 +301,8 @@ function importBackup(file) {
       localStorage.setItem("cotiza-demo-state", JSON.stringify(sanitizedState));
       showToast("Backup importado. Recargando Cotiza...");
       window.location.reload();
-    } catch {
+    } catch (error) {
+      window.CotizaMonitoring?.captureException?.(error, { area: "backup-import" });
       showToast("No se pudo importar el backup. Revisa el archivo JSON.", "error");
     }
   });

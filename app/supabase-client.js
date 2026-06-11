@@ -1,7 +1,7 @@
 // Cotiza - Supabase client + auth helpers
 // Exposes: window.sb, window.CotizaAuth
 
-(function () {
+(async function () {
   function showElement(element, display = "") {
     if (element) element.style.display = display;
   }
@@ -42,18 +42,19 @@
     },
   };
 
-  if (
-    typeof supabase === "undefined" ||
-    typeof SUPABASE_URL === "undefined" ||
-    typeof SUPABASE_ANON_KEY === "undefined"
-  ) {
+  const runtimeConfig =
+    typeof window.CotizaConfig?.loadConfig === "function" ? await window.CotizaConfig.loadConfig() : {};
+  const supabaseUrl = runtimeConfig.SUPABASE_URL || "";
+  const supabaseAnonKey = runtimeConfig.SUPABASE_ANON_KEY || "";
+
+  if (typeof supabase === "undefined" || !supabaseUrl || !supabaseAnonKey) {
     window.CotizaAuth = fallbackAuth;
     document.addEventListener("DOMContentLoaded", () => fallbackAuth.init());
     return;
   }
 
   const { createClient } = supabase;
-  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const sb = createClient(supabaseUrl, supabaseAnonKey);
   window.sb = sb;
 
   const CotizaAuth = {
@@ -74,6 +75,7 @@
           this._showApp();
           await this._refreshCloudData();
         } catch (err) {
+          window.CotizaMonitoring?.captureException?.(err, { area: "auth-init" });
           console.error("Error cargando negocio en init():", err);
           this._showApp();
         }
@@ -89,6 +91,7 @@
             this._showApp();
             await this._refreshCloudData();
           } catch (err) {
+            window.CotizaMonitoring?.captureException?.(err, { area: "auth-state-change", event });
             console.error("Error al cargar datos de la nube:", err);
             this._showApp();
           }
@@ -171,6 +174,7 @@
             document.getElementById("login-password").value
           );
         } catch (err) {
+          window.CotizaMonitoring?.captureException?.(err, { area: "login" });
           error.textContent = err.message;
           error.style.display = "block";
         } finally {
