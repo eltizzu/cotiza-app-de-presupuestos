@@ -205,15 +205,20 @@
       if (loginButton) loginButton.hidden = isLoggedIn;
       if (logoutButton) logoutButton.hidden = !isLoggedIn;
 
-      // Banner y botón restaurar: ocultar advertencias cuando hay nube conectada
+      // Banner y botón restaurar: ocultar cuando hay nube conectada
+      const demoNotice = document.getElementById("demo-notice");
       const noticeText = document.getElementById("demo-notice-text");
       const restoreBtn = document.querySelector("button.restore-btn, #restore-demo, [data-action='restore']");
+      if (demoNotice) demoNotice.hidden = isLoggedIn;
       if (noticeText) {
         noticeText.textContent = isLoggedIn
           ? "Tus datos se guardan en la nube automaticamente."
           : "No cargues datos sensibles. La informacion se guarda solo en este navegador y puede borrarse desde \"Restaurar demo\".";
       }
       if (restoreBtn) restoreBtn.hidden = isLoggedIn;
+      // Ocultar etiqueta "Demo V1" cuando hay sesión real
+      const eyebrow = document.querySelector(".topbar .eyebrow");
+      if (eyebrow) eyebrow.hidden = isLoggedIn;
     },
   };
 
