@@ -291,6 +291,80 @@ Plantilla sugerida:
 
 Al crear el presupuesto, cargar la cantidad de piezas. Si son 4 enchufes, poner `cantidad = 4`.
 
+### Ejemplo Completo: Cambiar Un Grifo
+
+Este ejemplo muestra el flujo entero: primero se prepara la receta y despues se usa para un cliente.
+
+**Paso 1: revisar precios**
+
+En "Precios", deberian existir estos conceptos:
+
+| Concepto | Tipo | Unidad | Ejemplo de precio |
+| --- | --- | --- | --- |
+| Grifo monomando estandar | Material | unidad | 42 |
+| Material auxiliar fontaneria | Material | unidad | 9 |
+| Hora oficial | Mano de obra | hora | 28 |
+| Desplazamiento urbano | Transporte | unidad | 25 |
+
+Si el cliente pone el grifo, igual se puede dejar el precio cargado y despues borrar esa linea del presupuesto concreto.
+
+**Paso 2: revisar rendimientos**
+
+En "Consumos y tiempos", deberia existir:
+
+| Nombre | Variable | Resultado por unidad | Unidad resultante |
+| --- | --- | --- | --- |
+| Horas cambio de grifo | cantidad | 1,2 | horas |
+| Desplazamiento por trabajo | cantidad | 1 | unidad |
+
+Esto significa:
+
+```text
+1 grifo x 1,2 horas = 1,2 horas de mano de obra
+```
+
+**Paso 3: revisar o crear la plantilla**
+
+En "Plantillas de trabajos", la plantilla "Cambiar grifo" deberia tener estas partidas:
+
+| Partida | Calculo |
+| --- | --- |
+| Grifo monomando estandar | Cantidad directa -> cantidad |
+| Material auxiliar fontaneria | Cantidad directa -> cantidad |
+| Hora oficial | Usar rendimiento -> Horas cambio de grifo |
+| Desplazamiento urbano | Usar rendimiento -> Desplazamiento por trabajo |
+
+Esta plantilla es la receta. Todavia no es el presupuesto de un cliente.
+
+**Paso 4: crear el presupuesto**
+
+En "Presupuesto":
+
+1. Elegir la plantilla "Cambiar grifo".
+2. Cargar cliente y direccion.
+3. Poner `cantidad = 1`.
+4. Pulsar "Crear presupuesto base".
+
+Cotiza arma una base parecida a:
+
+| Partida | Calculo esperado |
+| --- | --- |
+| Grifo monomando estandar | 1 unidad |
+| Material auxiliar fontaneria | 1 unidad |
+| Hora oficial | 1,2 horas |
+| Desplazamiento urbano | 1 unidad |
+
+**Paso 5: ajustar el caso real**
+
+Antes de guardar:
+
+- Si el cliente compra el grifo, quitar la linea del grifo.
+- Si hay que adaptar una conexion, agregar una linea manual.
+- Si lleva mas tiempo, editar las horas o el importe.
+- Si no hay desplazamiento, quitar esa linea.
+
+Despues guardar, cambiar estado si corresponde e imprimir o guardar PDF.
+
 ### Tirar Una Pared O Demolicion Simple
 
 Para tirar una pared, puede usarse `m2` si el esfuerzo depende del tamano.

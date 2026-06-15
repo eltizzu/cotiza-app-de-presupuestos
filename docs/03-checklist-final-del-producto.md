@@ -54,6 +54,7 @@
 - [x] Logo visible en impresion si el usuario no cargo logo propio.
 - [x] Guia rapida dentro de la app para probar la demo sin explicacion externa.
 - [x] Ayuda simple en plantillas para empezar duplicando ejemplos sin agregar un asistente pesado.
+- [x] Explicacion practica en app de como una plantilla se convierte en presupuesto.
 - [x] Ajustes responsive para pantallas moviles.
 - [x] Persistencia local de la demo en el navegador.
 - [x] Login inicial con Supabase.
@@ -104,6 +105,7 @@
 - [x] Manual de uso reescrito como guia paso a paso.
 - [x] Tutorial de primer presupuesto incluido.
 - [x] Guia de trabajos no basados solo en pintura o m2 incluida en el manual.
+- [x] Ejemplo completo "Cambiar grifo" documentado paso a paso.
 - [x] Guia rapida de prueba incorporada en la app.
 - [x] Resumen legal/fiscal actualizado para demo local.
 - [x] Documento de web legal actualizado para almacenamiento local y backup.

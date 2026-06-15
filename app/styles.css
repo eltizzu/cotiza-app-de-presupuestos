@@ -290,6 +290,48 @@ h2 {
   margin-top: 5px;
 }
 
+.practical-guide {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 20px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.practical-guide h3 {
+  margin: 4px 0 8px;
+  color: var(--ink);
+  font-size: 18px;
+}
+
+.practical-guide p,
+.practical-guide li {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.practical-guide ol,
+.practical-guide ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.practical-guide li + li {
+  margin-top: 8px;
+}
+
+.practical-guide strong {
+  color: var(--accent);
+}
+
+.compact-guide {
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.9fr);
+}
+
 .calculation-explanation:empty {
   display: none;
 }
@@ -879,6 +921,7 @@ td input {
   .backup-panel,
   .test-guide,
   .starter-help,
+  .practical-guide,
   .explanation-grid,
   .chart-grid,
   .client-layout,
@@ -972,6 +1015,7 @@ td input {
   .entry-form,
   .backup-panel,
   .test-guide,
+  .practical-guide,
   .saved-quotes,
   .chart-panel,
   .client-detail,

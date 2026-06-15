@@ -265,6 +265,11 @@
         <h3>Cambiar una pieza o instalar algo</h3>
         <p>Para trabajos repetibles como cambiar grifo, foco, enchufe o cerradura, usar <code>cantidad</code> como variable principal. Ejemplo: 4 enchufes → <code>cantidad = 4</code>. La plantilla calcula automaticamente piezas, material auxiliar, mano de obra y desplazamiento.</p>
 
+        <h3>Ejemplo completo: cambiar un grifo</h3>
+        <p>Primero revisar precios: grifo, material auxiliar, hora oficial y desplazamiento. Luego revisar el rendimiento "Horas cambio de grifo", por ejemplo 1,2 horas por cantidad.</p>
+        <p>La plantilla "Cambiar grifo" combina grifo por cantidad, material auxiliar por cantidad, hora oficial usando ese rendimiento y desplazamiento por trabajo.</p>
+        <p>Para crear el presupuesto real, entrar en Presupuesto, elegir "Cambiar grifo", poner <code>cantidad = 1</code> y pulsar Crear presupuesto base. Si el cliente pone el grifo, borrar esa linea; si aparece un extra, agregarlo como linea manual.</p>
+
         <h3>Demolicion simple</h3>
         <p>Usar <code>m2</code> si el esfuerzo depende del tamano. Plantilla sugerida: hora oficial por rendimiento m2, retirada de escombros por m2, saca/contenedor manual, proteccion de zona y desplazamiento. Si hay instalaciones, humedad o estructura, dejar una nota para revisar manualmente.</p>
 

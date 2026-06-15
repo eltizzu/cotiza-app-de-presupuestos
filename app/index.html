@@ -341,7 +341,20 @@
           </div>
           <div class="assist-panel">
             <strong>La parte que ahorra tiempo</strong>
-            <p>Una plantilla combina precios y consumos para armar un presupuesto base. Por ejemplo: pintar habitacion = pintura + materiales auxiliares + horas + desplazamiento.</p>
+            <p>Una plantilla es una receta reutilizable. Por ejemplo: cambiar grifo = grifo + material auxiliar + horas de fontaneria + desplazamiento. La creas una vez y despues la usas en Presupuesto para cada cliente.</p>
+          </div>
+          <div class="practical-guide">
+            <div>
+              <p class="eyebrow">Ejemplo rapido</p>
+              <h3>Cambiar un grifo</h3>
+              <p>Primero arma o revisa la plantilla. Despues, en Presupuesto, elegis "Cambiar grifo", pones cantidad 1 y Cotiza calcula la base editable.</p>
+            </div>
+            <ol>
+              <li><strong>Precios:</strong> grifo, material auxiliar, hora oficial y desplazamiento.</li>
+              <li><strong>Rendimiento:</strong> horas cambio de grifo por cantidad.</li>
+              <li><strong>Plantilla:</strong> combina esas partidas como receta del trabajo.</li>
+              <li><strong>Presupuesto:</strong> usa la receta para un cliente concreto y ajusta lo necesario.</li>
+            </ol>
           </div>
           <div class="starter-help">
             <div>
@@ -375,10 +388,12 @@
                     <option value="rule">Usar rendimiento</option>
                     <option value="direct">Cantidad directa</option>
                   </select>
+                  <small>Usar rendimiento sirve para horas o consumos ya cargados. Cantidad directa sirve para piezas, m2 o metros lineales.</small>
                 </label>
                 <label class="rule-field">
                   Rendimiento
                   <select id="templateLineRule"></select>
+                  <small>Ejemplo: Horas cambio de grifo calcula horas segun la cantidad de grifos.</small>
                 </label>
                 <label class="direct-field hidden">
                   Variable
@@ -387,6 +402,7 @@
                     <option value="quantity">cantidad</option>
                     <option value="linear">metros lineales</option>
                   </select>
+                  <small>Elegí cantidad para cambiar piezas, m2 para superficies y metros lineales para rodapies, cableado o tuberias.</small>
                 </label>
                 <label>
                   Multiplicador
@@ -409,6 +425,18 @@
           <div class="section-heading">
             <p class="eyebrow">Presupuesto editable</p>
             <h2>Crear presupuesto</h2>
+          </div>
+          <div class="practical-guide compact-guide">
+            <div>
+              <p class="eyebrow">Como se usa</p>
+              <h3>De plantilla a presupuesto</h3>
+              <p>Elegí el trabajo tipo, carga la medida que corresponda y pulsa "Crear presupuesto base". Luego revisa, borra o agrega lineas antes de guardar.</p>
+            </div>
+            <ul>
+              <li><strong>Cambiar grifo:</strong> usa cantidad 1, o 2 si son dos grifos.</li>
+              <li><strong>Tirar una pared:</strong> usa superficie m2 aproximada.</li>
+              <li><strong>Trabajo por horas:</strong> usa cantidad como horas estimadas.</li>
+            </ul>
           </div>
           <div class="quote-data">
             <label>

@@ -366,3 +366,4 @@ Decision de producto:
 - Cotiza debe presentarse como herramienta para oficios y trabajos tecnicos en general, no como calculadora de pintura.
 - La documentacion debe explicar cuando usar `m2`, `cantidad`, `metros lineales` o lineas manuales.
 - La app puede mantener una interfaz simple si el manual y los textos guian bien la creacion de plantillas.
+- La interfaz debe mostrar ejemplos concretos, como "Cambiar grifo", para explicar que una plantilla es una receta y el presupuesto es un uso real de esa receta.
