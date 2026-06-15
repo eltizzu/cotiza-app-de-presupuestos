@@ -350,3 +350,19 @@ Decision de producto:
 - El dashboard se limita a metricas accionables para validar valor: volumen, estado y clientes.
 - Turnia queda solo como estructura conceptual hasta tener tablas reales de citas, servicios, estados y horarios.
 - No se agrega infraestructura extra antes de validar si estas metricas ayudan al usuario a entender mejor su negocio.
+
+## 2026-06-15 - Manual ampliado para oficios variados
+
+Se amplio el manual para explicar como adaptar Cotiza a trabajos que no son solo pintura por m2:
+
+- Reparaciones puntuales.
+- Cambios de piezas o instalaciones por cantidad.
+- Demoliciones o retirada de pared por m2.
+- Trabajos por horas.
+- Presupuestos mixtos con parte calculada y parte manual.
+
+Decision de producto:
+
+- Cotiza debe presentarse como herramienta para oficios y trabajos tecnicos en general, no como calculadora de pintura.
+- La documentacion debe explicar cuando usar `m2`, `cantidad`, `metros lineales` o lineas manuales.
+- La app puede mantener una interfaz simple si el manual y los textos guian bien la creacion de plantillas.

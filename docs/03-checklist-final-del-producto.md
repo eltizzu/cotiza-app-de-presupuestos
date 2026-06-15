@@ -103,6 +103,7 @@
 - [x] Manual de uso actualizado.
 - [x] Manual de uso reescrito como guia paso a paso.
 - [x] Tutorial de primer presupuesto incluido.
+- [x] Guia de trabajos no basados solo en pintura o m2 incluida en el manual.
 - [x] Guia rapida de prueba incorporada en la app.
 - [x] Resumen legal/fiscal actualizado para demo local.
 - [x] Documento de web legal actualizado para almacenamiento local y backup.

@@ -209,6 +209,202 @@ Ejemplo:
 
 Consejo: para empezar mas facil, conviene duplicar una plantilla parecida y cambiarla. Es menos pesado que crear todo desde cero.
 
+## Casos Practicos: Reparaciones, Cambios Y Demoliciones
+
+Cotiza no sirve solo para pintar por m2. La misma logica se puede usar para reparaciones, cambios de piezas, instalaciones, demoliciones y trabajos mixtos.
+
+La clave es elegir bien como se mide el trabajo:
+
+| Tipo de trabajo | Variable recomendada | Ejemplos |
+| --- | --- | --- |
+| Trabajo por superficie | m2 | pintar, alicatar, colocar suelo, tirar revestimiento, demoler tabique por superficie |
+| Trabajo por unidad | cantidad | cambiar grifo, foco, enchufe, cerradura, reparar persiana, instalar aparato |
+| Trabajo lineal | metros lineales | rodapie, cableado, canaleta, tuberia, junta, remate |
+| Trabajo incierto o puntual | linea manual o horas | diagnostico, reparacion no repetitiva, ajuste final |
+
+### Reparacion Puntual
+
+Para reparar algo que puede variar mucho, conviene crear una plantilla simple y editable.
+
+Ejemplo: "Reparacion general".
+
+Precios que conviene tener cargados:
+
+- Hora oficial.
+- Material auxiliar reparaciones.
+- Desplazamiento urbano.
+- Diagnostico / visita tecnica, si se cobra aparte.
+
+Rendimientos utiles:
+
+- Horas reparacion por unidad.
+- Desplazamiento por trabajo.
+
+Plantilla sugerida:
+
+| Partida | Calculo | Como usarla |
+| --- | --- | --- |
+| Diagnostico / visita tecnica | Cantidad directa -> cantidad | 1 unidad si se cobra visita |
+| Hora oficial | Usar rendimiento -> horas por cantidad | Cantidad = numero de reparaciones o bloques de trabajo |
+| Material auxiliar reparaciones | Cantidad directa -> cantidad | 1 unidad o ajustar manualmente |
+| Desplazamiento urbano | Usar rendimiento -> desplazamiento por trabajo | Normalmente 1 |
+
+Al crear el presupuesto, poner `cantidad = 1` para una reparacion. Luego revisar las horas y materiales antes de guardar.
+
+Si la reparacion es muy incierta, usar la plantilla como base y agregar una linea manual llamada "Ajuste segun revision en obra" o "Material pendiente de confirmar".
+
+### Cambiar Una Pieza O Instalar Algo
+
+Para trabajos repetibles, la variable mas clara suele ser `cantidad`.
+
+Ejemplos:
+
+- Cambiar grifo.
+- Cambiar foco.
+- Cambiar enchufe.
+- Cambiar cerradura.
+- Instalar ventilador.
+- Colocar aplique.
+
+Ejemplo de plantilla: "Cambiar enchufe".
+
+Precios:
+
+- Enchufe / mecanismo.
+- Material auxiliar electrico.
+- Hora oficial.
+- Desplazamiento urbano.
+
+Rendimientos:
+
+- Horas cambiar enchufe.
+- Desplazamiento por trabajo.
+
+Plantilla sugerida:
+
+| Partida | Calculo | Ejemplo |
+| --- | --- | --- |
+| Enchufe / mecanismo | Cantidad directa -> cantidad | Si son 4 enchufes, calcula 4 unidades |
+| Material auxiliar electrico | Cantidad directa -> cantidad | Puede ser 1 por enchufe o una unidad global |
+| Hora oficial | Usar rendimiento -> horas cambiar enchufe | 4 enchufes x horas por enchufe |
+| Desplazamiento urbano | Usar rendimiento -> desplazamiento por trabajo | 1 desplazamiento |
+
+Al crear el presupuesto, cargar la cantidad de piezas. Si son 4 enchufes, poner `cantidad = 4`.
+
+### Tirar Una Pared O Demolicion Simple
+
+Para tirar una pared, puede usarse `m2` si el esfuerzo depende del tamano.
+
+Ejemplo de plantilla: "Demolicion de tabique".
+
+Precios:
+
+- Hora oficial.
+- Saca / contenedor.
+- Proteccion de zona.
+- Retirada de escombros.
+- Desplazamiento urbano.
+
+Rendimientos:
+
+- Horas demolicion por m2.
+- Escombro por m2, si se quiere estimar sacas.
+- Desplazamiento por trabajo.
+
+Plantilla sugerida:
+
+| Partida | Calculo | Como usarla |
+| --- | --- | --- |
+| Hora oficial | Usar rendimiento -> horas demolicion por m2 | Calcula mano de obra por superficie |
+| Retirada de escombros | Cantidad directa -> m2 | Se puede cobrar por m2 demolido |
+| Saca / contenedor | Cantidad directa -> cantidad | Ajustar manualmente segun volumen |
+| Proteccion de zona | Cantidad directa -> cantidad | Normalmente 1 |
+| Desplazamiento urbano | Usar rendimiento -> desplazamiento por trabajo | Normalmente 1 |
+
+Al crear el presupuesto, cargar la superficie aproximada de pared. Por ejemplo, una pared de 4 m x 2,5 m son 10 m2.
+
+Importante: si no se sabe si la pared tiene instalaciones, humedad, estructura o retirada compleja, conviene dejar una nota para el cliente y revisar manualmente el resultado.
+
+### Trabajo Por Horas
+
+Para trabajos donde no hay una medida clara, se puede presupuestar por horas.
+
+Ejemplos:
+
+- Reparacion variada.
+- Mantenimiento.
+- Ajustes de carpinteria.
+- Revision electrica.
+- Trabajos pequenos acumulados.
+
+Forma simple:
+
+1. Crear un precio llamado "Hora oficial".
+2. Crear una plantilla llamada "Trabajo por horas".
+3. Agregar una partida con "Hora oficial".
+4. Usar cantidad directa con variable `cantidad`.
+
+Al crear el presupuesto, usar `cantidad` como numero de horas estimadas.
+
+Ejemplo:
+
+```text
+Cantidad = 3
+Hora oficial = 28 EUR
+Total mano de obra = 84 EUR
+```
+
+Despues se pueden sumar lineas manuales para materiales, parking, desplazamiento o urgencia.
+
+### Presupuesto Mixto
+
+Muchos trabajos reales mezclan varias logicas.
+
+Ejemplo: "Reparar humedad y pintar zona".
+
+Puede incluir:
+
+- Mano de obra reparacion: cantidad u horas.
+- Material impermeabilizante: m2.
+- Pintura: m2.
+- Material auxiliar: cantidad.
+- Desplazamiento: unidad.
+- Nota aclaratoria: revision final segun estado real.
+
+En estos casos, no hace falta que todo sea automatico. Lo mas sano es que Cotiza calcule la base repetible y que la persona ajuste lo que dependa de la visita.
+
+### Cuando Usar Lineas Manuales
+
+Usar lineas manuales cuando:
+
+- Es un concepto unico que no vale la pena convertir en plantilla.
+- Hay un extra que aparece solo en ese trabajo.
+- El precio se pacta de forma cerrada.
+- Falta informacion para calcularlo bien.
+- Se quiere sumar una aclaracion economica puntual.
+
+Ejemplos:
+
+- Reparacion previa de pared.
+- Urgencia fuera de horario.
+- Retirada adicional.
+- Compra especial.
+- Ajuste manual por dificultad.
+
+### Metodo Recomendado Para Crear Un Trabajo Nuevo
+
+Cuando aparezca un tipo de trabajo nuevo:
+
+1. Pensar que se repite siempre en ese trabajo.
+2. Cargar o revisar los precios necesarios.
+3. Cargar rendimientos solo si ayudan a calcular mejor.
+4. Crear una plantilla simple.
+5. Probarla con un caso real.
+6. Editar el presupuesto resultante.
+7. Si se repite varias veces, mejorar la plantilla.
+
+No conviene crear una plantilla perfecta desde el primer dia. Conviene crear una base util, probarla y corregirla con experiencia real.
+
 ## 5. Presupuesto
 
 En "Presupuesto" se crea el documento editable.

@@ -29,24 +29,35 @@
     .sidebar-title { padding: 0 1.25rem 0.75rem; color: var(--text-muted); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
     .sidebar a { display: block; padding: 0.45rem 1.25rem; border-left: 3px solid transparent; color: var(--text-muted); text-decoration: none; font-size: 0.875rem; }
     .sidebar a:hover { border-left-color: var(--primary); background: var(--primary-ultra); color: var(--primary); }
+    .sidebar-group { padding: 0.75rem 1.25rem 0.25rem; color: var(--text-muted); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; margin-top: 0.5rem; }
     .main { flex: 1; max-width: 860px; padding: 3rem 4rem; }
     .doc-hero { margin-bottom: 3rem; padding: 2.5rem; border-radius: 16px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: #fff; }
     .doc-hero h1 { margin-bottom: 0.5rem; font-family: "Sora", sans-serif; font-size: 2rem; }
     .doc-meta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.25rem; opacity: 0.8; font-size: 0.8rem; }
     .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
     .section h2 { margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); color: var(--primary); font-family: "Sora", sans-serif; font-size: 1.4rem; }
-    .section h3 { margin: 1.5rem 0 0.5rem; font-size: 1.05rem; }
+    .section h3 { margin: 1.75rem 0 0.5rem; color: var(--text); font-size: 1.05rem; }
+    .section h4 { margin: 1.25rem 0 0.4rem; color: var(--primary); font-size: 0.95rem; }
     .section p, .section li { color: #374747; }
     .section p { margin-bottom: 0.75rem; }
     .section ul, .section ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .section li { margin-bottom: 0.3rem; }
     .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1rem 0; }
     .card, .info-box, .flow-box { border: 1px solid var(--border); background: var(--card); }
     .card { padding: 1.25rem; border-radius: 10px; }
-    .card h4 { margin-bottom: 0.5rem; color: var(--primary); font-size: 0.9rem; }
+    .card h4 { margin: 0 0 0.5rem; color: var(--primary); font-size: 0.9rem; }
     .info-box { margin: 1rem 0; padding: 1rem 1.25rem; border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; background: var(--primary-ultra); font-size: 0.9rem; }
     .flow-box { margin: 1rem 0; padding: 1.5rem; border-radius: 12px; }
-    .quote { margin: 0.5rem 0; padding-left: 1rem; border-left: 3px solid var(--primary); color: var(--primary); font-style: italic; }
+    .quote { margin: 0.75rem 0; padding: 0.5rem 1rem; border-left: 3px solid var(--primary); color: var(--primary); font-style: italic; font-size: 1rem; }
     code { padding: 0.15rem 0.4rem; border: 1px solid var(--border); border-radius: 4px; background: var(--code-bg); color: var(--primary); font-family: "Courier New", monospace; font-size: 0.875em; }
+    pre { margin: 1rem 0; padding: 1rem 1.25rem; border-radius: 8px; background: var(--code-bg); border: 1px solid var(--border); font-family: "Courier New", monospace; font-size: 0.85rem; color: var(--text); white-space: pre-wrap; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.875rem; }
+    th { background: var(--primary-ultra); color: var(--primary); font-weight: 600; text-align: left; padding: 0.6rem 0.9rem; border: 1px solid var(--border); }
+    td { padding: 0.55rem 0.9rem; border: 1px solid var(--border); color: #374747; }
+    tr:nth-child(even) td { background: #fafafa; }
+    .step-list { counter-reset: steps; padding: 0; list-style: none; }
+    .step-list li { counter-increment: steps; display: flex; gap: 1rem; margin-bottom: 1rem; }
+    .step-list li::before { content: counter(steps); flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
     @media (max-width: 900px) { .sidebar { display: none; } .main { padding: 2rem 1.5rem; } .header { padding: 0 1rem; } }
   </style>
 </head>
@@ -64,23 +75,29 @@
       <div class="sidebar-title">Contenido</div>
       <a href="#que-es">Que es Cotiza</a>
       <a href="#estructura">Estructura</a>
+      <div class="sidebar-group">Secciones</div>
       <a href="#inicio">1. Inicio</a>
       <a href="#precios">2. Precios</a>
-      <a href="#rendimientos">3. Rendimientos</a>
-      <a href="#trabajos">4. Trabajos tipo</a>
+      <a href="#consumos">3. Consumos y tiempos</a>
+      <a href="#plantillas">4. Plantillas</a>
       <a href="#presupuesto">5. Presupuesto</a>
       <a href="#guardar">6. Guardar y seguir</a>
-      <a href="#pdf">7. Imprimir / PDF</a>
+      <a href="#dashboard">7. Dashboard</a>
+      <a href="#clientes">8. Clientes</a>
+      <a href="#pdf">9. Imprimir / PDF</a>
+      <div class="sidebar-group">Guias</div>
+      <a href="#casos">Casos practicos</a>
+      <a href="#tutorial">Tutorial completo</a>
       <a href="#buenas-practicas">Buenas practicas</a>
       <a href="#limites">Limites</a>
     </nav>
 
     <main class="main">
       <div class="doc-hero">
-        <h1>Manual de Uso - Cotiza</h1>
-        <p>Presupuestos de reformas y trabajos tecnicos a partir de tus propios precios, rendimientos y trabajos tipo.</p>
+        <h1>Manual de Uso — Cotiza</h1>
+        <p>Presupuestos de reformas y trabajos tecnicos a partir de tus propios precios, consumos y plantillas.</p>
         <div class="doc-meta">
-          <span>Ultima actualizacion: 2 de junio de 2026</span>
+          <span>Actualizado: junio 2026</span>
           <span>Para autonomos y pymes</span>
         </div>
       </div>
@@ -88,97 +105,227 @@
       <section class="section" id="que-es">
         <h2>Que es Cotiza</h2>
         <div class="flow-box">
-          <p>Cotiza es una herramienta para crear presupuestos claros a partir de datos controlados por el usuario.</p>
-          <p class="quote">Precios + Rendimientos + Trabajos tipo = Presupuesto base editable</p>
-          <p>Cotiza no inventa precios ni decide por ti. Calcula una base usando tu informacion y te deja revisar, editar y cerrar el presupuesto.</p>
+          <p>Cotiza es una herramienta para crear presupuestos de reformas, oficios y trabajos tecnicos a partir de datos controlados por el usuario.</p>
+          <p class="quote">Precios + Consumos y tiempos + Plantillas = Presupuesto base editable</p>
+          <p>Cotiza no inventa precios ni decide por el usuario. Calcula una base usando la informacion cargada y deja que la persona revise, edite y cierre el presupuesto.</p>
         </div>
       </section>
 
       <section class="section" id="estructura">
         <h2>Estructura de la app</h2>
-        <p>La demo tiene cinco secciones principales que conviene usar en orden la primera vez.</p>
+        <p>La app tiene nueve secciones. Conviene usarlas en orden la primera vez.</p>
         <div class="card-grid">
-          <div class="card"><h4>1. Inicio</h4><p>Datos del negocio, moneda, impuesto, margen y backup local.</p></div>
-          <div class="card"><h4>2. Precios</h4><p>Materiales, mano de obra, transporte, alquileres y otros costes.</p></div>
-          <div class="card"><h4>3. Rendimientos</h4><p>Reglas de calculo: horas por m2, litros por m2 o unidades por cantidad.</p></div>
-          <div class="card"><h4>4. Plantillas</h4><p>Trabajos tipo que combinan precios y rendimientos.</p></div>
-          <div class="card"><h4>5. Presupuesto</h4><p>Documento editable para guardar, seguir e imprimir.</p></div>
+          <div class="card"><h4>1. Inicio</h4><p>Datos del negocio, margen, impuesto y backup local.</p></div>
+          <div class="card"><h4>2. Precios</h4><p>Materiales, mano de obra, transporte y otros costes.</p></div>
+          <div class="card"><h4>3. Consumos</h4><p>Reglas de calculo: horas por m2, litros por m2, etc.</p></div>
+          <div class="card"><h4>4. Plantillas</h4><p>Trabajos tipo reutilizables.</p></div>
+          <div class="card"><h4>5. Presupuesto</h4><p>Documento editable, calculo y edicion de partidas.</p></div>
+          <div class="card"><h4>6. Guardar</h4><p>Historial, estados y busqueda.</p></div>
+          <div class="card"><h4>7. Dashboard</h4><p>Metricas de volumen y estados.</p></div>
+          <div class="card"><h4>8. Clientes</h4><p>Base de clientes desde presupuestos.</p></div>
+          <div class="card"><h4>9. PDF</h4><p>Impresion limpia para el cliente.</p></div>
         </div>
       </section>
 
       <section class="section" id="inicio">
         <h2>1. Inicio</h2>
-        <p>Carga el nombre del negocio, telefono, email, direccion, moneda, impuesto y margen por defecto.</p>
-        <div class="info-box">El margen sirve para calcular el precio antes de impuestos. No aparece como margen interno en la impresion para el cliente.</div>
-        <p>Desde esta pantalla tambien puedes exportar o importar un backup local. Los backups pueden contener clientes, direcciones e importes, asi que conviene guardarlos con cuidado.</p>
+        <p>En "Inicio" se cargan los datos generales del negocio: nombre, telefono, email, direccion, moneda, impuesto por defecto y margen por defecto.</p>
+        <div class="info-box">El margen se usa para calcular el precio antes de impuestos a partir del coste estimado. La impresion para el cliente no muestra el margen interno.</div>
+        <h3>Backup local</h3>
+        <p>Desde "Inicio" tambien se puede exportar e importar un backup. El backup es un archivo JSON con todos los datos de Cotiza.</p>
+        <ul>
+          <li>Si se inicia sesion, Cotiza guarda los datos en la nube automaticamente.</li>
+          <li>Sin sesion, la app funciona en modo local con <code>localStorage</code>.</li>
+          <li>Si se borra el almacenamiento del navegador, se pueden perder los datos locales.</li>
+          <li>Conviene exportar backup si se cargan datos importantes.</li>
+          <li>Importar un backup reemplaza los datos locales actuales.</li>
+        </ul>
       </section>
 
       <section class="section" id="precios">
         <h2>2. Precios</h2>
-        <p>En Precios se carga la base de costes: materiales, mano de obra, transporte, alquiler u otro concepto.</p>
-        <ul>
-          <li>Concepto: por ejemplo, pintura plastica interior.</li>
-          <li>Tipo: material, mano de obra, transporte, alquiler u otro.</li>
-          <li>Unidad: litro, hora, unidad, m2 o metro lineal.</li>
-          <li>Precio unitario: coste base que se usara en las plantillas.</li>
-        </ul>
-        <p>Tambien puedes editar o eliminar precios cargados. Si renombras un precio, Cotiza actualiza las plantillas que lo usan.</p>
+        <p>En "Precios" se carga la base de costes. Un precio puede ser material, mano de obra, transporte, alquiler u otro concepto.</p>
+        <p>Campos: concepto, tipo, unidad y precio unitario.</p>
+        <table>
+          <thead><tr><th>Concepto</th><th>Tipo</th><th>Unidad</th><th>Precio</th></tr></thead>
+          <tbody>
+            <tr><td>Pintura plastica interior</td><td>Material</td><td>litro</td><td>8,50</td></tr>
+            <tr><td>Material auxiliar pintura</td><td>Material</td><td>m2</td><td>0,65</td></tr>
+            <tr><td>Hora oficial</td><td>Mano de obra</td><td>hora</td><td>28</td></tr>
+            <tr><td>Desplazamiento urbano</td><td>Transporte</td><td>unidad</td><td>25</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box">No hace falta cargar todo al principio. Mejor empezar con los precios necesarios para los trabajos mas frecuentes.</div>
       </section>
 
-      <section class="section" id="rendimientos">
-        <h2>3. Rendimientos</h2>
-        <p>Los rendimientos son reglas para estimar cantidades o tiempos. Por ejemplo: 0,18 horas por m2 de pintura.</p>
+      <section class="section" id="consumos">
+        <h2>3. Consumos y tiempos</h2>
+        <p>En "Consumos y tiempos" se cargan reglas para estimar cantidades o tiempos. Un consumo responde preguntas como: cuantas horas lleva una tarea, cuanto material se consume por m2 o cuantas unidades se necesitan segun cantidad.</p>
+        <p>Campos: nombre, variable, resultado por unidad y unidad resultante.</p>
         <div class="info-box">Variables disponibles: <code>m2</code>, <code>cantidad</code> y <code>metros lineales</code>.</div>
-        <p>Tambien puedes editar o eliminar rendimientos. Si renombras uno, Cotiza actualiza las plantillas que lo usan.</p>
+        <table>
+          <thead><tr><th>Nombre</th><th>Variable</th><th>Resultado por unidad</th><th>Unidad</th></tr></thead>
+          <tbody>
+            <tr><td>Litros pintura por m2 y mano</td><td>m2</td><td>0,125</td><td>litros</td></tr>
+            <tr><td>Horas pintura por m2</td><td>m2</td><td>0,18</td><td>horas</td></tr>
+            <tr><td>Horas cambio de grifo</td><td>cantidad</td><td>1,2</td><td>horas</td></tr>
+            <tr><td>Horas colocar suelo por m2</td><td>m2</td><td>0,35</td><td>horas</td></tr>
+          </tbody>
+        </table>
+        <p>Ejemplo: si "Horas pintura por m2" vale 0,18 y el trabajo tiene 25 m2, Cotiza estima 25 × 0,18 = 4,5 horas.</p>
       </section>
 
-      <section class="section" id="trabajos">
-        <h2>4. Trabajos tipo</h2>
-        <p>Un trabajo tipo es una plantilla reutilizable. Ejemplos: pintar habitacion, cambiar grifo, colocar suelo laminado o cambiar foco.</p>
-        <ol>
-          <li>Escribe nombre y descripcion breve.</li>
-          <li>Agrega partidas con precio asociado.</li>
-          <li>Elige si cada partida usa un rendimiento o una cantidad directa.</li>
-          <li>Guarda la plantilla y pruebala en Presupuesto.</li>
+      <section class="section" id="plantillas">
+        <h2>4. Plantillas de trabajos</h2>
+        <p>Una plantilla de trabajo es una receta reutilizable. Ejemplos: pintar habitacion, cambiar grifo, colocar suelo laminado, cambiar foco.</p>
+        <h3>Crear una plantilla</h3>
+        <ol class="step-list">
+          <li>Escribir el nombre del trabajo y una descripcion breve.</li>
+          <li>Agregar partidas. Cada partida necesita: precio asociado, tipo de calculo y multiplicador.</li>
+          <li>Guardar la plantilla.</li>
         </ol>
+        <h3>Tipos de calculo</h3>
+        <h4>Usar rendimiento</h4>
+        <p>Sirve cuando ya existe una regla cargada en "Consumos y tiempos". Ejemplo: precio = Hora oficial, rendimiento = Horas pintura por m2.</p>
+        <h4>Cantidad directa</h4>
+        <p>Sirve cuando la partida depende directamente de m2, cantidad o metros lineales. Ejemplo: precio = Suelo laminado AC5, variable = m2, multiplicador = 1,08 (8% por merma).</p>
+        <h3>Editar o duplicar</h3>
+        <p>Cada plantilla se puede editar o duplicar. Duplicar sirve para crear variantes sin empezar de cero. Consejo: para empezar mas facil, duplicar una plantilla parecida y cambiarla.</p>
       </section>
 
       <section class="section" id="presupuesto">
         <h2>5. Presupuesto</h2>
-        <p>En Presupuesto eliges una plantilla, introduces medidas y pulsas Crear presupuesto base.</p>
-        <p>Despues puedes editar lineas, reordenarlas, quitarlas o agregar lineas manuales. Si editas una linea calculada, Cotiza deja de mostrar la formula original para evitar explicaciones falsas.</p>
+        <p>En "Presupuesto" se crea el documento editable. Campos: numero, cliente, direccion/obra, validez, fecha y estado.</p>
+        <p>Estados disponibles: Borrador, Enviado, Aceptado, Rechazado.</p>
+        <h3>Crear presupuesto base</h3>
+        <ol class="step-list">
+          <li>Elegir una plantilla de trabajo.</li>
+          <li>Cargar superficie m2, cantidad o metros lineales segun corresponda.</li>
+          <li>Pulsar "Crear presupuesto base".</li>
+        </ol>
+        <p>Cotiza genera las partidas y muestra una explicacion de cada calculo. Por ejemplo: <em>25 m2 × 0,18 horas/m2 = 4,5 horas → 4,5 × 28 EUR = 126 EUR</em>. El usuario siempre puede editar el resultado.</p>
+        <h3>Editar partidas</h3>
+        <p>Despues de calcular, las lineas se pueden editar, reordenar, quitar o ajustar en cantidad y precio unitario. El resultado calculado es una base, no un presupuesto cerrado automaticamente.</p>
+        <h3>Agregar lineas extra</h3>
+        <p>Se pueden agregar conceptos manuales que no esten en la plantilla: retirada de escombros, proteccion especial, reparacion previa, desplazamiento adicional, ajuste manual.</p>
       </section>
 
       <section class="section" id="guardar">
         <h2>6. Guardar y seguir presupuestos</h2>
-        <p>El boton Guardar presupuesto guarda o actualiza el presupuesto segun su numero. El historial local permite abrir, cambiar estado, eliminar y buscar presupuestos.</p>
-        <p>Los estados disponibles son borrador, enviado, aceptado y rechazado.</p>
+        <p>El boton "Guardar presupuesto" guarda el presupuesto actual en el historial.</p>
+        <p>Desde "Presupuestos guardados" se puede abrir un presupuesto anterior, cambiar su estado, eliminarlo, buscar por numero, cliente, direccion o notas, y filtrar por estado.</p>
+        <p>El resumen comercial muestra borradores, enviados, aceptados y rechazados con sus totales.</p>
+        <div class="info-box">Sin sesion, el historial es local del navegador. Con sesion iniciada, los presupuestos se sincronizan automaticamente con la nube.</div>
+      </section>
+
+      <section class="section" id="dashboard">
+        <h2>7. Dashboard</h2>
+        <p>En "Dashboard" se ven metricas simples de los presupuestos guardados. Permite responder rapidamente:</p>
+        <ul>
+          <li>Cuantos presupuestos se hicieron en el periodo.</li>
+          <li>Cuanto monto total se presupuesto.</li>
+          <li>Que porcentaje esta pendiente, aceptado o rechazado.</li>
+          <li>Que clientes concentran mas volumen.</li>
+        </ul>
+        <p>El filtro de periodo permite revisar esta semana, este mes o los ultimos 3 meses. Los graficos muestran presupuestos por estado y principales clientes por volumen.</p>
+        <div class="info-box">Si no hay presupuestos guardados, el dashboard queda vacio hasta guardar al menos uno.</div>
+      </section>
+
+      <section class="section" id="clientes">
+        <h2>8. Clientes</h2>
+        <p>En "Clientes" se arma una base simple a partir de los presupuestos guardados. No hace falta cargar clientes a mano: Cotiza detecta el nombre del cliente desde cada presupuesto y muestra nombre, telefono, email, fecha de primer contacto, cantidad de presupuestos y volumen total.</p>
+        <p>Tambien se puede buscar por nombre o telefono, ordenar por volumen, fecha o nombre, y abrir un cliente para ver su historial completo de presupuestos.</p>
+        <div class="info-box">Con sesion iniciada, al guardar un presupuesto Cotiza crea o vincula el cliente automaticamente en la nube, evitando duplicados.</div>
       </section>
 
       <section class="section" id="pdf">
-        <h2>7. Imprimir / PDF</h2>
-        <p>El boton Imprimir / Guardar PDF abre la impresion del navegador. La vista imprimible incluye datos del negocio, datos del cliente, partidas, subtotal, impuesto y total.</p>
-        <div class="info-box">Revisa siempre cliente, numero, fecha, validez, partidas, cantidades, precios y total antes de enviarlo.</div>
+        <h2>9. Imprimir / Guardar PDF</h2>
+        <p>El boton "Imprimir / Guardar PDF" abre la impresion del navegador. Desde ahi se puede imprimir o guardar como PDF.</p>
+        <p>La impresion incluye: datos del negocio, datos del cliente, fecha, partidas, notas, subtotal, impuesto, total y condiciones comerciales basicas.</p>
+        <p>La impresion <strong>no muestra</strong>: coste interno, margen interno ni estado comercial interno.</p>
+        <div class="info-box">Revisar siempre cliente, numero, fecha, validez, partidas, cantidades, precios y total antes de enviarlo al cliente.</div>
+      </section>
+
+      <section class="section" id="casos">
+        <h2>Casos practicos</h2>
+        <p>Cotiza no sirve solo para pintar por m2. La misma logica se adapta a reparaciones, cambios de piezas, instalaciones, demoliciones y trabajos mixtos.</p>
+        <table>
+          <thead><tr><th>Tipo de trabajo</th><th>Variable recomendada</th><th>Ejemplos</th></tr></thead>
+          <tbody>
+            <tr><td>Trabajo por superficie</td><td>m2</td><td>pintar, alicatar, colocar suelo, demoler tabique</td></tr>
+            <tr><td>Trabajo por unidad</td><td>cantidad</td><td>cambiar grifo, foco, enchufe, cerradura</td></tr>
+            <tr><td>Trabajo lineal</td><td>metros lineales</td><td>rodapie, cableado, canaleta, tuberia</td></tr>
+            <tr><td>Trabajo incierto</td><td>linea manual o horas</td><td>diagnostico, reparacion no repetitiva</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Reparacion puntual</h3>
+        <p>Crear una plantilla simple llamada "Reparacion general" con: diagnostico/visita tecnica, hora oficial, material auxiliar y desplazamiento. Al crear el presupuesto usar <code>cantidad = 1</code> y ajustar horas y materiales manualmente. Si la reparacion es muy incierta, agregar una linea manual como "Ajuste segun revision en obra".</p>
+
+        <h3>Cambiar una pieza o instalar algo</h3>
+        <p>Para trabajos repetibles como cambiar grifo, foco, enchufe o cerradura, usar <code>cantidad</code> como variable principal. Ejemplo: 4 enchufes → <code>cantidad = 4</code>. La plantilla calcula automaticamente piezas, material auxiliar, mano de obra y desplazamiento.</p>
+
+        <h3>Demolicion simple</h3>
+        <p>Usar <code>m2</code> si el esfuerzo depende del tamano. Plantilla sugerida: hora oficial por rendimiento m2, retirada de escombros por m2, saca/contenedor manual, proteccion de zona y desplazamiento. Si hay instalaciones, humedad o estructura, dejar una nota para revisar manualmente.</p>
+
+        <h3>Trabajo por horas</h3>
+        <p>Para trabajos sin medida clara: crear un precio "Hora oficial", una plantilla "Trabajo por horas" con cantidad directa y variable <code>cantidad</code>. Al presupuestar, usar <code>cantidad = numero de horas estimadas</code>. Sumar lineas manuales para materiales, parking o urgencia.</p>
+
+        <h3>Presupuesto mixto</h3>
+        <p>Muchos trabajos mezclan varias logicas. En esos casos, Cotiza calcula la parte repetible y la persona ajusta lo que depende de la visita. Usar lineas manuales para conceptos unicos, extras puntuales o cuando falta informacion.</p>
+
+        <h3>Cuando usar lineas manuales</h3>
+        <ul>
+          <li>Concepto unico que no vale la pena convertir en plantilla.</li>
+          <li>Extra que aparece solo en ese trabajo.</li>
+          <li>Precio pactado de forma cerrada.</li>
+          <li>Falta informacion para calcularlo bien.</li>
+          <li>Aclaracion economica puntual.</li>
+        </ul>
+      </section>
+
+      <section class="section" id="tutorial">
+        <h2>Tutorial: crear un primer presupuesto</h2>
+        <p>Este ejemplo cubre el flujo completo con un presupuesto de pintura de 25 m2.</p>
+        <ol class="step-list">
+          <li><strong>Configuracion.</strong> Ir a "Inicio" y cargar nombre del negocio, moneda EUR, impuesto 21, margen 20. Pulsar "Guardar configuracion".</li>
+          <li><strong>Precios.</strong> Ir a "Precios" y asegurarse de tener: pintura plastica interior, material auxiliar pintura, hora oficial y desplazamiento urbano.</li>
+          <li><strong>Consumos y tiempos.</strong> Verificar: litros pintura por m2, horas pintura por m2 y desplazamiento por trabajo.</li>
+          <li><strong>Presupuesto base.</strong> Ir a "Presupuesto", elegir plantilla "Pintar habitacion", superficie m2 = 25, cantidad = 1. Pulsar "Crear presupuesto base".</li>
+          <li><strong>Ajustar.</strong> Revisar cantidades y precios. Agregar si hace falta una linea extra, por ejemplo "Reparacion pequena de pared" a 35 EUR.</li>
+          <li><strong>Guardar.</strong> Cargar cliente, direccion, fecha, validez y estado "Borrador". Pulsar "Guardar presupuesto".</li>
+          <li><strong>Cambiar estado.</strong> Cuando se envie al cliente: Enviado. Si acepta: Aceptado. Si no avanza: Rechazado.</li>
+          <li><strong>Dashboard.</strong> Ir a "Dashboard" y comprobar totales, estados y top clientes.</li>
+          <li><strong>Clientes.</strong> Ir a "Clientes", buscar el cliente y abrir su detalle para ver el historial.</li>
+          <li><strong>PDF.</strong> Pulsar "Imprimir / Guardar PDF", revisar la vista y guardar desde el navegador.</li>
+        </ol>
       </section>
 
       <section class="section" id="buenas-practicas">
         <h2>Buenas practicas</h2>
         <ul>
-          <li>Mantener precios y rendimientos actualizados.</li>
-          <li>Usar trabajos tipo como base, no como verdad absoluta.</li>
-          <li>Exportar backups si cargas datos importantes.</li>
-          <li>No usar la demo como sistema fiscal, contable o legal.</li>
+          <li>Revisar siempre el presupuesto antes de enviarlo.</li>
+          <li>Mantener precios actualizados segun los costes reales.</li>
+          <li>Ajustar consumos y tiempos con experiencia real en obra.</li>
+          <li>Usar plantillas como base, no como verdad absoluta.</li>
+          <li>Revisar Dashboard y Clientes despues de guardar presupuestos.</li>
+          <li>Exportar backup si se cargan datos importantes.</li>
+          <li>No usar Cotiza como sistema fiscal, contable o legal.</li>
+          <li>Imprimir solo despues de revisar el resultado final.</li>
         </ul>
       </section>
 
       <section class="section" id="limites">
-        <h2>Limites de la demo</h2>
+        <h2>Limites de la version actual</h2>
         <ul>
-          <li>Los datos se guardan solo en el navegador.</li>
-          <li>No hay usuarios, permisos ni sincronizacion en la nube.</li>
+          <li>Sin login, los datos se guardan solo en el navegador. Con login se sincronizan en la nube.</li>
+          <li>Todavia no hay roles avanzados ni panel de administracion.</li>
+          <li>Clientes se detecta desde presupuestos; no es un CRM completo.</li>
+          <li>Dashboard muestra metricas basicas, no analitica avanzada.</li>
           <li>No hay facturacion ni contabilidad.</li>
-          <li>No hay importacion desde Excel todavia.</li>
+          <li>No hay importador de Excel todavia.</li>
         </ul>
+        <p>Cotiza sirve para validar el flujo central: cargar datos propios, calcular una base editable y generar un presupuesto ordenado para el cliente.</p>
       </section>
     </main>
   </div>
