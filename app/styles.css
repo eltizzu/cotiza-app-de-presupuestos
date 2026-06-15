@@ -1013,7 +1013,8 @@ td input {
   }
 
   .topbar,
-  .layout {
+  .layout,
+  .demo-notice {
     display: none;
   }
 
