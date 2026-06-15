@@ -80,7 +80,8 @@
           this._showApp();
         }
       } else {
-        this._showLocalMode();
+        // Supabase está configurado pero no hay sesión → mostrar login directamente
+        this.openLogin();
       }
 
       sb.auth.onAuthStateChange(async (event, session) => {
@@ -120,6 +121,9 @@
         error.style.display = "none";
       }
       showElement(document.getElementById("cotiza-login-overlay"), "flex");
+      // Ocultar banner demo mientras el login está visible
+      const demoNotice = document.getElementById("demo-notice");
+      if (demoNotice) demoNotice.hidden = true;
     },
 
     closeLogin() {
