@@ -170,13 +170,16 @@
       document.getElementById("login-btn")?.addEventListener("click", async () => {
         const button = document.getElementById("login-btn");
         const error = document.getElementById("login-error");
+        const email = document.getElementById("login-email").value.trim();
+        if (!window.Cotiza?.core?.isValidEmail(email)) {
+          error.textContent = "Ingresa un email valido.";
+          error.style.display = "block";
+          return;
+        }
         button.disabled = true;
         button.textContent = "Entrando...";
         try {
-          await this.signIn(
-            document.getElementById("login-email").value,
-            document.getElementById("login-password").value
-          );
+          await this.signIn(email, document.getElementById("login-password").value);
         } catch (err) {
           window.CotizaMonitoring?.captureException?.(err, { area: "login" });
           error.textContent = err.message;

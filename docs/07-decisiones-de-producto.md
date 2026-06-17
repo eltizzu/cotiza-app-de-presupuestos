@@ -367,3 +367,24 @@ Decision de producto:
 - La documentacion debe explicar cuando usar `m2`, `cantidad`, `metros lineales` o lineas manuales.
 - La app puede mantener una interfaz simple si el manual y los textos guian bien la creacion de plantillas.
 - La interfaz debe mostrar ejemplos concretos, como "Cambiar grifo", para explicar que una plantilla es una receta y el presupuesto es un uso real de esa receta.
+
+## 2026-06-17 - Validacion y sanitizacion antes de guardar
+
+Se endurecio la entrada de datos en formularios y sincronizacion:
+
+- Configuracion del negocio.
+- Login por email.
+- Precios.
+- Rendimientos.
+- Plantillas.
+- Lineas manuales del presupuesto.
+- Presupuestos guardados.
+- Sincronizacion con Supabase.
+
+Decision tecnica:
+
+- La app debe rechazar datos peligrosos antes de guardarlos, no solo escaparlos al mostrarlos.
+- Los textos ingresados por el usuario no deben aceptar HTML, scripts, atributos de eventos ni enlaces `javascript:`.
+- Los numeros se validan como numeros reales y los campos clave tienen largos maximos.
+- Como Cotiza todavia no tiene endpoints serverless de guardado, la segunda barrera de validacion queda en `supabase-sync.js`, justo antes de escribir en Supabase.
+- Si mas adelante se mueven las escrituras a funciones serverless o Edge Functions, estas mismas reglas deben reutilizarse tambien del lado servidor.

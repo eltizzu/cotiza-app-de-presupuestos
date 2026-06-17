@@ -1,16 +1,28 @@
 // Cotiza - runtime config loader
-// anon key is intentionally public (Supabase client-side key, RLS enforced)
+// Deployed values come from /api/config. Keep real values out of this file.
 
 (function () {
-  const STATIC_CONFIG = {
-    SUPABASE_URL: "https://pszjetkmuajjiwrrlunn.supabase.co",
-    SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzempldGttdWFqaml3cnJsdW5uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NTM3NjEsImV4cCI6MjA5NjIyOTc2MX0.OCK1l58FmAFTy5C0I5GGUakQZ_h-2D2NS7yUTLBRF0w",
-    SENTRY_DSN: "",
-    SENTRY_ENVIRONMENT: "production",
-  };
+  let configPromise = null;
 
   async function loadConfig() {
-    return STATIC_CONFIG;
+    if (configPromise) return configPromise;
+    configPromise = fetchConfig();
+    return configPromise;
+  }
+
+  async function fetchConfig() {
+    try {
+      const response = await fetch("/api/config", { cache: "no-store" });
+      if (!response.ok) throw new Error("Config no disponible");
+      return await response.json();
+    } catch {
+      return {
+        SUPABASE_URL: "",
+        SUPABASE_ANON_KEY: "",
+        SENTRY_DSN: "",
+        SENTRY_ENVIRONMENT: "local",
+      };
+    }
   }
 
   window.CotizaConfig = { loadConfig };

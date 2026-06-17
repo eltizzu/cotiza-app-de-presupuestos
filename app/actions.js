@@ -22,6 +22,12 @@ function showToast(message, type = "success") {
   }, 2600);
 }
 
+function showValidationErrors(validation) {
+  if (validation?.ok) return false;
+  showToast(validation?.errors?.[0] || "Revisa los datos cargados.", "error");
+  return true;
+}
+
 function syncWhenLogged(task) {
   if (!window.CotizaSync?.isEnabled?.()) return;
   task(window.CotizaSync).catch((error) => {
@@ -137,17 +143,20 @@ function saveCurrentQuote() {
     notes: document.getElementById("budgetNotes").value,
     totals: render.getTotals(),
   };
+  const validation = core.validateSavedQuoteInput(savedQuote, state.quote);
+  if (showValidationErrors(validation)) return;
+  const cleanSavedQuote = validation.value;
 
   if (existingIndex >= 0) {
-    state.savedQuotes[existingIndex] = savedQuote;
+    state.savedQuotes[existingIndex] = cleanSavedQuote;
   } else {
-    state.savedQuotes.unshift(savedQuote);
+    state.savedQuotes.unshift(cleanSavedQuote);
     state.nextQuoteNumber += 1;
   }
 
   render.renderSavedQuotes();
   saveState();
-  syncWhenLogged((sync) => sync.saveQuote(savedQuote, state.nextQuoteNumber).then(refreshInsights));
+  syncWhenLogged((sync) => sync.saveQuote(cleanSavedQuote, state.nextQuoteNumber).then(refreshInsights));
   refreshInsights();
   showToast(existingIndex >= 0 ? "Presupuesto actualizado." : "Presupuesto guardado.");
 }
@@ -436,7 +445,7 @@ function bindEvents() {
   });
 
   document.getElementById("saveSettings").addEventListener("click", () => {
-    state.settings = {
+    const validation = core.validateSettingsInput({
       businessName: document.getElementById("inputBusinessName").value || "Mi negocio",
       businessPhone: document.getElementById("inputBusinessPhone").value || "",
       businessEmail: document.getElementById("inputBusinessEmail").value || "",
@@ -445,7 +454,9 @@ function bindEvents() {
       currency: core.normalizeCurrency(document.getElementById("inputCurrency").value || "EUR"),
       tax: core.toSafeNumber(document.getElementById("inputTax").value, 0),
       margin: core.toSafeNumber(document.getElementById("inputMargin").value, 0),
-    };
+    });
+    if (showValidationErrors(validation)) return;
+    state.settings = validation.value;
     render.renderSettings();
     render.renderBudget();
     saveState();
@@ -494,21 +505,24 @@ function bindEvents() {
       unit: document.getElementById("priceUnit").value,
       price: Math.max(0, core.toSafeNumber(document.getElementById("priceValue").value, 0)),
     };
+    const validation = core.validatePriceInput(priceData);
+    if (showValidationErrors(validation)) return;
+    const cleanPriceData = validation.value;
     const previousName = editingPriceIndex === null ? null : state.prices[editingPriceIndex]?.name;
-    const duplicateIndex = findIndexByName(state.prices, priceData.name, editingPriceIndex);
+    const duplicateIndex = findIndexByName(state.prices, cleanPriceData.name, editingPriceIndex);
     if (editingPriceIndex !== null && duplicateIndex >= 0) {
       showToast("Ya existe un precio con ese nombre.", "error");
       return;
     }
     if (editingPriceIndex === null) {
       if (duplicateIndex >= 0) {
-        state.prices[duplicateIndex] = priceData;
+        state.prices[duplicateIndex] = cleanPriceData;
       } else {
-        state.prices.push(priceData);
+        state.prices.push(cleanPriceData);
       }
     } else {
-      state.prices[editingPriceIndex] = priceData;
-      state.templates = core.renameTemplatePriceReferences(state.templates, previousName, priceData.name);
+      state.prices[editingPriceIndex] = cleanPriceData;
+      state.templates = core.renameTemplatePriceReferences(state.templates, previousName, cleanPriceData.name);
     }
     const wasEditing = editingPriceIndex !== null || duplicateIndex >= 0;
     resetPriceForm();
@@ -516,7 +530,7 @@ function bindEvents() {
     render.renderTemplates();
     render.renderBudget();
     saveState();
-    syncWhenLogged((sync) => sync.upsertPrice(priceData, previousName));
+    syncWhenLogged((sync) => sync.upsertPrice(cleanPriceData, previousName));
     showToast(wasEditing ? "Precio actualizado." : "Precio agregado.");
   });
 
@@ -537,21 +551,24 @@ function bindEvents() {
       factor: Math.max(0, core.toSafeNumber(document.getElementById("ruleFactor").value, 0)),
       unit: document.getElementById("ruleUnit").value,
     };
+    const validation = core.validateRuleInput(ruleData);
+    if (showValidationErrors(validation)) return;
+    const cleanRuleData = validation.value;
     const previousName = editingRuleIndex === null ? null : state.rules[editingRuleIndex]?.name;
-    const duplicateIndex = findIndexByName(state.rules, ruleData.name, editingRuleIndex);
+    const duplicateIndex = findIndexByName(state.rules, cleanRuleData.name, editingRuleIndex);
     if (editingRuleIndex !== null && duplicateIndex >= 0) {
       showToast("Ya existe un rendimiento con ese nombre.", "error");
       return;
     }
     if (editingRuleIndex === null) {
       if (duplicateIndex >= 0) {
-        state.rules[duplicateIndex] = ruleData;
+        state.rules[duplicateIndex] = cleanRuleData;
       } else {
-        state.rules.push(ruleData);
+        state.rules.push(cleanRuleData);
       }
     } else {
-      state.rules[editingRuleIndex] = ruleData;
-      state.templates = core.renameTemplateRuleReferences(state.templates, previousName, ruleData.name);
+      state.rules[editingRuleIndex] = cleanRuleData;
+      state.templates = core.renameTemplateRuleReferences(state.templates, previousName, cleanRuleData.name);
     }
     const wasEditing = editingRuleIndex !== null || duplicateIndex >= 0;
     resetRuleForm();
@@ -559,7 +576,7 @@ function bindEvents() {
     render.renderDraftTemplateLines();
     render.renderBudget();
     saveState();
-    syncWhenLogged((sync) => sync.upsertRule(ruleData, previousName));
+    syncWhenLogged((sync) => sync.upsertRule(cleanRuleData, previousName));
     showToast(wasEditing ? "Rendimiento actualizado." : "Rendimiento agregado.");
   });
 
@@ -600,10 +617,13 @@ function bindEvents() {
       description: document.getElementById("templateDescription").value,
       lines: state.draftTemplateLines.map((line) => ({ ...line })),
     };
+    const validation = core.validateTemplateInput(templateData);
+    if (showValidationErrors(validation)) return;
+    const cleanTemplateData = validation.value;
     const editingTemplateIndex = state.templates.findIndex((template) => template.id === state.editingTemplateId);
     const duplicateTemplateIndex = findIndexByName(
       state.templates,
-      templateData.name,
+      cleanTemplateData.name,
       editingTemplateIndex >= 0 ? editingTemplateIndex : null
     );
     if (wasEditing && duplicateTemplateIndex >= 0) {
@@ -612,13 +632,13 @@ function bindEvents() {
     }
     if (state.editingTemplateId) {
       state.templates = state.templates.map((template) =>
-        template.id === state.editingTemplateId ? templateData : template
+        template.id === state.editingTemplateId ? cleanTemplateData : template
       );
     } else if (duplicateTemplateIndex >= 0) {
-      templateData.id = state.templates[duplicateTemplateIndex].id;
-      state.templates[duplicateTemplateIndex] = templateData;
+      cleanTemplateData.id = state.templates[duplicateTemplateIndex].id;
+      state.templates[duplicateTemplateIndex] = cleanTemplateData;
     } else {
-      state.templates.push(templateData);
+      state.templates.push(cleanTemplateData);
     }
     const updatedExistingTemplate = !wasEditing && duplicateTemplateIndex >= 0;
     state.editingTemplateId = null;
@@ -629,7 +649,7 @@ function bindEvents() {
     render.renderTemplates();
     render.renderDraftTemplateLines();
     saveState();
-    syncWhenLogged((sync) => sync.saveTemplate(templateData, previousTemplate?.name));
+    syncWhenLogged((sync) => sync.saveTemplate(cleanTemplateData, previousTemplate?.name));
     showToast(wasEditing || updatedExistingTemplate ? "Plantilla actualizada." : "Plantilla guardada.");
   });
 
@@ -654,12 +674,14 @@ function bindEvents() {
 
   document.getElementById("manualLineForm").addEventListener("submit", (event) => {
     event.preventDefault();
-    state.budgetLines.push({
+    const validation = core.validateBudgetLineInput({
       name: document.getElementById("manualLineName").value,
       quantity: Number(document.getElementById("manualLineQuantity").value) || 0,
       unit: document.getElementById("manualLineUnit").value,
       unitPrice: Number(document.getElementById("manualLinePrice").value) || 0,
     });
+    if (showValidationErrors(validation)) return;
+    state.budgetLines.push(validation.value);
     event.target.reset();
     document.getElementById("manualLineQuantity").value = 1;
     render.renderBudget();

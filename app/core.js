@@ -9,14 +9,69 @@
   const VALID_VARIABLES = new Set(["area", "quantity", "linear"]);
   const VALID_STATUSES = new Set(["draft", "sent", "accepted", "rejected"]);
   const VALID_PRICE_TYPES = new Set(["Material", "Mano de obra", "Transporte", "Alquiler", "Otro"]);
+  const MAX_TEXT = {
+    short: 40,
+    name: 120,
+    medium: 240,
+    long: 1000,
+    email: 254,
+  };
 
   function isPlainObject(value) {
     return Boolean(value) && typeof value === "object" && !Array.isArray(value);
   }
 
   function text(value, fallback = "") {
-    const result = String(value ?? "").trim();
+    const result = stripHtml(String(value ?? "")).trim();
     return result || fallback;
+  }
+
+  function hasHtml(value) {
+    return /<[^>]*>|<\/|javascript:|on\w+\s*=/i.test(String(value ?? ""));
+  }
+
+  function stripHtml(value) {
+    return String(value ?? "")
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+      .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, "")
+      .replace(/<[^>]*>/g, "")
+      .replace(/javascript:/gi, "")
+      .replace(/\son\w+\s*=/gi, "");
+  }
+
+  function limitText(value, maxLength) {
+    return text(value).slice(0, maxLength);
+  }
+
+  function isValidEmail(value) {
+    const email = text(value);
+    if (!email) return true;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= MAX_TEXT.email;
+  }
+
+  function result(value, errors) {
+    return { ok: errors.length === 0, value, errors };
+  }
+
+  function validateTextField(rawValue, label, options = {}) {
+    const errors = [];
+    const maxLength = options.maxLength || MAX_TEXT.medium;
+    const value = limitText(rawValue, maxLength);
+    if (options.required && !value) errors.push(`${label} es obligatorio.`);
+    if (hasHtml(rawValue)) errors.push(`${label} no puede contener html o scripts.`);
+    if (String(rawValue ?? "").trim().length > maxLength) errors.push(`${label} supera el maximo de ${maxLength} caracteres.`);
+    if (options.email && !isValidEmail(value)) errors.push(`${label} debe tener formato de email valido.`);
+    return { value, errors };
+  }
+
+  function validateNumberField(rawValue, label, options = {}) {
+    const errors = [];
+    const number = Number(rawValue);
+    if (options.required && String(rawValue ?? "").trim() === "") errors.push(`${label} es obligatorio.`);
+    if (!Number.isFinite(number)) errors.push(`${label} debe ser numerico.`);
+    const safeNumber = Number.isFinite(number) ? number : options.fallback || 0;
+    if (options.min !== undefined && safeNumber < options.min) errors.push(`${label} no puede ser menor que ${options.min}.`);
+    return { value: Math.max(options.min ?? safeNumber, safeNumber), errors };
   }
 
   function toSafeNumber(value, fallback = 0) {
@@ -78,6 +133,146 @@
       unit: text(price.unit, "unidad"),
       price: Math.max(0, toSafeNumber(price.price, 0)),
     };
+  }
+
+  function validateSettingsInput(settings) {
+    const errors = [];
+    const businessName = validateTextField(settings?.businessName, "Nombre del negocio", { required: true, maxLength: MAX_TEXT.name });
+    const businessPhone = validateTextField(settings?.businessPhone, "Telefono", { maxLength: MAX_TEXT.short });
+    const businessEmail = validateTextField(settings?.businessEmail, "Email", { email: true, maxLength: MAX_TEXT.email });
+    const businessAddress = validateTextField(settings?.businessAddress, "Direccion", { maxLength: MAX_TEXT.medium });
+    const tax = validateNumberField(settings?.tax, "Impuesto", { min: 0 });
+    const margin = validateNumberField(settings?.margin, "Margen", { min: 0 });
+    errors.push(...businessName.errors, ...businessPhone.errors, ...businessEmail.errors, ...businessAddress.errors, ...tax.errors, ...margin.errors);
+    return result(
+      {
+        businessName: businessName.value || "Mi negocio",
+        businessPhone: businessPhone.value,
+        businessEmail: businessEmail.value,
+        businessAddress: businessAddress.value,
+        businessLogo: safeLogoSrc(settings?.businessLogo),
+        currency: normalizeCurrency(settings?.currency, DEFAULT_CURRENCY),
+        tax: tax.value,
+        margin: margin.value,
+      },
+      errors
+    );
+  }
+
+  function validatePriceInput(price) {
+    const errors = [];
+    const name = validateTextField(price?.name, "Concepto", { required: true, maxLength: MAX_TEXT.name });
+    const unit = validateTextField(price?.unit, "Unidad", { required: true, maxLength: MAX_TEXT.short });
+    const priceValue = validateNumberField(price?.price, "Precio", { required: true, min: 0 });
+    errors.push(...name.errors, ...unit.errors, ...priceValue.errors);
+    return result(
+      {
+        name: name.value,
+        type: VALID_PRICE_TYPES.has(price?.type) ? price.type : "Otro",
+        unit: unit.value || "unidad",
+        price: priceValue.value,
+      },
+      errors
+    );
+  }
+
+  function validateRuleInput(rule) {
+    const errors = [];
+    const name = validateTextField(rule?.name, "Nombre", { required: true, maxLength: MAX_TEXT.name });
+    const unit = validateTextField(rule?.unit, "Unidad resultante", { required: true, maxLength: MAX_TEXT.short });
+    const factor = validateNumberField(rule?.factor, "Resultado por unidad", { required: true, min: 0 });
+    errors.push(...name.errors, ...unit.errors, ...factor.errors);
+    return result(
+      {
+        name: name.value,
+        variable: normalizeVariable(rule?.variable, "area"),
+        factor: factor.value,
+        unit: unit.value || "unidad",
+      },
+      errors
+    );
+  }
+
+  function validateTemplateInput(template) {
+    const errors = [];
+    const name = validateTextField(template?.name, "Nombre del trabajo", { required: true, maxLength: MAX_TEXT.name });
+    const description = validateTextField(template?.description, "Descripcion", { required: true, maxLength: 600 });
+    const lines = Array.isArray(template?.lines) ? template.lines.map(sanitizeTemplateLine).filter(Boolean) : [];
+    errors.push(...name.errors, ...description.errors);
+    if (lines.length === 0) errors.push("La plantilla debe tener al menos una partida.");
+    return result(
+      {
+        id: slugId(template?.id || name.value, `template-${Date.now()}`),
+        name: name.value,
+        description: description.value,
+        lines,
+      },
+      errors
+    );
+  }
+
+  function validateBudgetLineInput(line) {
+    const errors = [];
+    const name = validateTextField(line?.name, "Linea", { required: true, maxLength: MAX_TEXT.name });
+    const unit = validateTextField(line?.unit, "Unidad", { required: true, maxLength: MAX_TEXT.short });
+    const quantity = validateNumberField(line?.quantity, "Cantidad", { required: true, min: 0 });
+    const unitPrice = validateNumberField(line?.unitPrice, "Precio", { required: true, min: 0 });
+    errors.push(...name.errors, ...unit.errors, ...quantity.errors, ...unitPrice.errors);
+    const value = { name: name.value, quantity: quantity.value, unit: unit.value || "unidad", unitPrice: unitPrice.value };
+    if (isPlainObject(line?.source)) value.source = { ...line.source };
+    return result(value, errors);
+  }
+
+  function validateQuoteDataInput(quote, fallback = {}) {
+    const errors = [];
+    const number = validateTextField(quote?.number, "Numero", { required: true, maxLength: MAX_TEXT.short });
+    const client = validateTextField(quote?.client, "Cliente", { maxLength: MAX_TEXT.name });
+    const address = validateTextField(quote?.address, "Direccion", { maxLength: MAX_TEXT.medium });
+    const validity = validateTextField(quote?.validity, "Validez", { maxLength: 80 });
+    const date = validateTextField(quote?.date, "Fecha", { maxLength: MAX_TEXT.short });
+    errors.push(...number.errors, ...client.errors, ...address.errors, ...validity.errors, ...date.errors);
+    return result(
+      {
+        ...fallback,
+        number: number.value || fallback.number || "P-0001",
+        client: client.value,
+        address: address.value,
+        validity: validity.value || fallback.validity || "15 dias",
+        date: date.value || fallback.date || new Date().toISOString().slice(0, 10),
+        status: normalizeStatus(quote?.status, fallback.status || "draft"),
+        statusUpdatedAt: text(quote?.statusUpdatedAt, fallback.statusUpdatedAt || new Date().toISOString()),
+      },
+      errors
+    );
+  }
+
+  function validateSavedQuoteInput(savedQuote, fallbackQuote = {}) {
+    const errors = [];
+    const quote = validateQuoteDataInput(savedQuote?.quote, fallbackQuote);
+    const notes = validateTextField(savedQuote?.notes, "Notas", { maxLength: MAX_TEXT.long });
+    const lines = (Array.isArray(savedQuote?.lines) ? savedQuote.lines : []).map(validateBudgetLineInput);
+    errors.push(...quote.errors, ...notes.errors, ...lines.flatMap((line) => line.errors));
+    if (lines.length === 0) errors.push("El presupuesto debe tener al menos una linea.");
+    const sanitizedLines = lines.filter((line) => line.ok).map((line) => line.value);
+    const fallbackTotal = sanitizedLines.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0);
+    return result(
+      {
+        id: text(savedQuote?.id, `quote-${Date.now()}`),
+        savedAt: text(savedQuote?.savedAt, new Date().toISOString()),
+        updatedAt: text(savedQuote?.updatedAt, savedQuote?.savedAt || new Date().toISOString()),
+        quote: quote.value,
+        lines: sanitizedLines,
+        notes: notes.value,
+        totals: {
+          cost: toSafeNumber(savedQuote?.totals?.cost, fallbackTotal),
+          margin: toSafeNumber(savedQuote?.totals?.margin, 0),
+          beforeTax: toSafeNumber(savedQuote?.totals?.beforeTax, fallbackTotal),
+          tax: toSafeNumber(savedQuote?.totals?.tax, 0),
+          total: toSafeNumber(savedQuote?.totals?.total, fallbackTotal),
+        },
+      },
+      errors
+    );
   }
 
   function sanitizeRule(rule) {
@@ -224,7 +419,7 @@
 
   function applyBudgetLineEdit(line, field, rawValue) {
     const next = { ...line };
-    next[field] = field === "quantity" || field === "unitPrice" ? Math.max(0, toSafeNumber(rawValue, 0)) : text(rawValue);
+    next[field] = field === "quantity" || field === "unitPrice" ? Math.max(0, toSafeNumber(rawValue, 0)) : limitText(rawValue, field === "unit" ? MAX_TEXT.short : MAX_TEXT.name);
     if (field === "quantity" || field === "unitPrice" || field === "unit" || field === "name") {
       delete next.source;
     }
@@ -347,6 +542,7 @@
     applyBudgetLineEdit,
     findQuoteIndexByNumber,
     isSafeLogoSrc,
+    isValidEmail,
     normalizeCurrency,
     normalizeStatus,
     normalizeVariable,
@@ -358,5 +554,12 @@
     sanitizeImportedState,
     text,
     toSafeNumber,
+    validateBudgetLineInput,
+    validatePriceInput,
+    validateRuleInput,
+    validateSavedQuoteInput,
+    validateSettingsInput,
+    validateQuoteDataInput,
+    validateTemplateInput,
   };
 });

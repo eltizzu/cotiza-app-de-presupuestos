@@ -47,11 +47,52 @@ test("sanitizes imported state before it reaches localStorage", () => {
   assert.equal(sanitized.settings.tax, 21);
   assert.equal(sanitized.settings.margin, 12.5);
   assert.equal(sanitized.settings.businessLogo, "");
-  assert.deepEqual(sanitized.prices, [{ name: "<b>Hora</b>", type: "Otro", unit: "hora", price: 30 }]);
+  assert.deepEqual(sanitized.prices, [{ name: "Hora", type: "Otro", unit: "hora", price: 30 }]);
   assert.equal(sanitized.rules[0].variable, "area");
-  assert.equal(sanitized.templates[0].id, "tpl-onclick-x");
+  assert.equal(sanitized.templates[0].id, "tpl-x");
   assert.equal(sanitized.templates[0].lines[0].variable, "quantity");
   assert.deepEqual(sanitized.savedQuotes, []);
+});
+
+test("validates user text fields before saving", () => {
+  const result = core.validatePriceInput({
+    name: '<script>alert("x")</script>',
+    type: "Material",
+    unit: "unidad",
+    price: "12",
+  });
+
+  assert.equal(result.ok, false);
+  assert(result.errors.some((error) => error.includes("html")));
+});
+
+test("sanitizes safe form data and rejects invalid email", () => {
+  const settings = core.validateSettingsInput({
+    businessName: " Reformas Norte ",
+    businessPhone: "600",
+    businessEmail: "no-es-email",
+    businessAddress: "Calle",
+    businessLogo: "",
+    currency: "EUR",
+    tax: "21",
+    margin: "20",
+  });
+
+  assert.equal(settings.ok, false);
+  assert(settings.errors.some((error) => error.includes("email")));
+  assert.equal(settings.value.businessName, "Reformas Norte");
+});
+
+test("validates quote payload before cloud sync", () => {
+  const result = core.validateSavedQuoteInput({
+    quote: { number: "P-1", client: "Ana", address: "<b>Calle</b>", validity: "15 dias", date: "2026-06-05", status: "draft" },
+    notes: "ok",
+    totals: { total: 10 },
+    lines: [{ name: "Hora", quantity: "2", unit: "hora", unitPrice: "30" }],
+  });
+
+  assert.equal(result.ok, false);
+  assert(result.errors.some((error) => error.includes("html")));
 });
 
 test("only safe logo sources are allowed in rendered attributes", () => {

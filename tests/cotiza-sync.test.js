@@ -310,7 +310,7 @@ test("creates a client automatically when saving a quote", async () => {
     {
       quote: { number: "P-1", client: "Nuevo Cliente", address: "Obra", validity: "15 dias", date: "2026-06-05", status: "draft" },
       totals: { total: 10 },
-      lines: [],
+      lines: [{ name: "Hora", quantity: 1, unit: "hora", unitPrice: 10 }],
     },
     2
   );
@@ -333,13 +333,33 @@ test("reuses existing client when saving a quote for the same business and name"
     {
       quote: { number: "P-1", client: "Ana", address: "Obra", validity: "15 dias", date: "2026-06-05", status: "draft" },
       totals: { total: 10 },
-      lines: [],
+      lines: [{ name: "Hora", quantity: 1, unit: "hora", unitPrice: 10 }],
     },
     2
   );
 
   assert.equal(fakeSb.calls.some((call) => call.table === "clients" && call.action === "insert"), false);
   assert(fakeSb.calls.some((call) => call.table === "quotes" && call.action === "upsert" && call.payload.client_id === "existing-client"));
+});
+
+test("rejects unsafe text before writing a quote to Supabase", async () => {
+  const fakeSb = createFakeSupabase({ clients: [] });
+  const sync = loadSync(fakeSb, { settings: {} });
+
+  await assert.rejects(
+    () =>
+      sync.saveQuote(
+        {
+          quote: { number: "P-1", client: "<script>alert(1)</script>", address: "Obra", validity: "15 dias", date: "2026-06-05", status: "draft" },
+          totals: { total: 10 },
+          lines: [{ name: "Hora", quantity: 1, unit: "hora", unitPrice: 20 }],
+        },
+        2
+      ),
+    /html/
+  );
+
+  assert.equal(fakeSb.calls.some((call) => call.table === "quotes" && call.action === "upsert"), false);
 });
 
 test("groups Supabase quotes without client id by client name", async () => {

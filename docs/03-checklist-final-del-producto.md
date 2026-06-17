@@ -30,6 +30,8 @@
 - [x] Busqueda y detalle de historial por cliente.
 - [x] Normalizacion basica de datos guardados antiguos.
 - [x] Proteccion basica de textos ingresados por el usuario al mostrarlos en HTML.
+- [x] Validacion de formularios antes de guardar: campos requeridos, email, numeros, largos maximos y bloqueo de HTML/scripts.
+- [x] Validacion de datos antes de sincronizar con Supabase para evitar guardar entradas inseguras.
 - [x] Separacion inicial de datos/utilidades en `state.js`.
 - [x] Separacion de renderizado en `render.js`.
 - [x] Separacion de acciones en `actions.js`.
@@ -72,6 +74,7 @@
 - [x] La app explica la carga de precios, consumos y plantillas con ayudas en pantalla.
 - [x] Los importes pueden editarse manualmente.
 - [x] La interfaz evita lenguaje tecnico innecesario.
+- [x] Los formularios bloquean entradas vacias, emails invalidos, numeros no validos y texto con HTML o scripts.
 - [x] No hay modulos que distraigan del presupuesto.
 - [ ] Mejor gestion visual de partidas dentro de trabajos tipo.
 - [ ] Confirmacion visual mas detallada para eliminaciones.

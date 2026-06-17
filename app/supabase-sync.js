@@ -223,15 +223,18 @@
 
     async saveSettings(settings, nextQuoteNumber) {
       if (!isEnabled()) return;
+      const validation = window.Cotiza.core.validateSettingsInput(settings);
+      if (!validation.ok) throw new Error(validation.errors[0]);
+      const cleanSettings = validation.value;
       const payload = {
-        name: settings.businessName,
-        phone: settings.businessPhone || "",
-        email: settings.businessEmail || "",
-        address: settings.businessAddress || "",
-        logo_url: settings.businessLogo || "",
-        currency: settings.currency,
-        tax_rate: settings.tax,
-        margin_rate: settings.margin,
+        name: cleanSettings.businessName,
+        phone: cleanSettings.businessPhone || "",
+        email: cleanSettings.businessEmail || "",
+        address: cleanSettings.businessAddress || "",
+        logo_url: cleanSettings.businessLogo || "",
+        currency: cleanSettings.currency,
+        tax_rate: cleanSettings.tax,
+        margin_rate: cleanSettings.margin,
       };
       if (nextQuoteNumber) payload.next_quote_number = nextQuoteNumber;
       withError(await window.sb.from("businesses").update(payload).eq("id", getBusinessId()), "Guardar negocio");
@@ -328,17 +331,20 @@
 
     async upsertPrice(price, previousName) {
       if (!isEnabled()) return;
-      if (previousName && previousName !== price.name) {
+      const validation = window.Cotiza.core.validatePriceInput(price);
+      if (!validation.ok) throw new Error(validation.errors[0]);
+      const cleanPrice = validation.value;
+      if (previousName && previousName !== cleanPrice.name) {
         const previous = await findByName("prices", previousName);
         if (previous) {
           withError(
             await window.sb
               .from("prices")
               .update({
-                name: price.name,
-                type: price.type,
-                unit: price.unit,
-                unit_price: price.price,
+                name: cleanPrice.name,
+                type: cleanPrice.type,
+                unit: cleanPrice.unit,
+                unit_price: cleanPrice.price,
               })
               .eq("id", previous.id),
             "Renombrar precio"
@@ -350,10 +356,10 @@
         await window.sb.from("prices").upsert(
           {
             business_id: getBusinessId(),
-            name: price.name,
-            type: price.type,
-            unit: price.unit,
-            unit_price: price.price,
+            name: cleanPrice.name,
+            type: cleanPrice.type,
+            unit: cleanPrice.unit,
+            unit_price: cleanPrice.price,
           },
           { onConflict: "business_id,name" }
         ),
@@ -371,17 +377,20 @@
 
     async upsertRule(rule, previousName) {
       if (!isEnabled()) return;
-      if (previousName && previousName !== rule.name) {
+      const validation = window.Cotiza.core.validateRuleInput(rule);
+      if (!validation.ok) throw new Error(validation.errors[0]);
+      const cleanRule = validation.value;
+      if (previousName && previousName !== cleanRule.name) {
         const previous = await findByName("rules", previousName);
         if (previous) {
           withError(
             await window.sb
               .from("rules")
               .update({
-                name: rule.name,
-                variable: rule.variable,
-                factor: rule.factor,
-                unit: rule.unit,
+                name: cleanRule.name,
+                variable: cleanRule.variable,
+                factor: cleanRule.factor,
+                unit: cleanRule.unit,
               })
               .eq("id", previous.id),
             "Renombrar rendimiento"
@@ -393,10 +402,10 @@
         await window.sb.from("rules").upsert(
           {
             business_id: getBusinessId(),
-            name: rule.name,
-            variable: rule.variable,
-            factor: rule.factor,
-            unit: rule.unit,
+            name: cleanRule.name,
+            variable: cleanRule.variable,
+            factor: cleanRule.factor,
+            unit: cleanRule.unit,
           },
           { onConflict: "business_id,name" }
         ),
@@ -414,15 +423,18 @@
 
     async saveTemplate(template, previousName) {
       if (!isEnabled()) return;
+      const validation = window.Cotiza.core.validateTemplateInput(template);
+      if (!validation.ok) throw new Error(validation.errors[0]);
+      const cleanTemplate = validation.value;
       const businessId = getBusinessId();
       let existing = null;
-      if (previousName && previousName !== template.name) existing = await findByName("templates", previousName);
-      if (!existing) existing = await findByName("templates", template.name);
+      if (previousName && previousName !== cleanTemplate.name) existing = await findByName("templates", previousName);
+      if (!existing) existing = await findByName("templates", cleanTemplate.name);
 
       const templatePayload = {
         business_id: businessId,
-        name: template.name,
-        description: template.description || "",
+        name: cleanTemplate.name,
+        description: cleanTemplate.description || "",
       };
 
       let templateId = existing?.id;
@@ -439,7 +451,7 @@
       withError(await window.sb.from("template_lines").delete().eq("template_id", templateId), "Limpiar plantilla");
 
       const linePayloads = [];
-      for (const [index, line] of (template.lines || []).entries()) {
+      for (const [index, line] of (cleanTemplate.lines || []).entries()) {
         const priceId = await idByName("prices", line.priceName);
         if (!priceId) continue;
         const ruleId = line.ruleName ? await idByName("rules", line.ruleName) : null;
@@ -462,23 +474,26 @@
 
     async saveQuote(savedQuote, nextQuoteNumber) {
       if (!isEnabled() || !savedQuote?.quote?.number) return;
-      const clientId = await this.ensureClientFromQuote(savedQuote);
+      const validation = window.Cotiza.core.validateSavedQuoteInput(savedQuote);
+      if (!validation.ok) throw new Error(validation.errors[0]);
+      const cleanQuote = validation.value;
+      const clientId = await this.ensureClientFromQuote(cleanQuote);
       const quotePayload = {
         business_id: getBusinessId(),
         client_id: clientId,
-        number: savedQuote.quote.number,
-        client_name: savedQuote.quote.client || "",
-        work_address: savedQuote.quote.address || "",
-        validity: savedQuote.quote.validity || "15 dias",
-        quote_date: savedQuote.quote.date || new Date().toISOString().slice(0, 10),
-        status: savedQuote.quote.status || "draft",
-        status_updated_at: savedQuote.quote.statusUpdatedAt || new Date().toISOString(),
-        notes: savedQuote.notes || "",
-        cost_total: savedQuote.totals?.cost || 0,
-        margin_total: savedQuote.totals?.margin || 0,
-        before_tax_total: savedQuote.totals?.beforeTax || 0,
-        tax_total: savedQuote.totals?.tax || 0,
-        grand_total: savedQuote.totals?.total || 0,
+        number: cleanQuote.quote.number,
+        client_name: cleanQuote.quote.client || "",
+        work_address: cleanQuote.quote.address || "",
+        validity: cleanQuote.quote.validity || "15 dias",
+        quote_date: cleanQuote.quote.date || new Date().toISOString().slice(0, 10),
+        status: cleanQuote.quote.status || "draft",
+        status_updated_at: cleanQuote.quote.statusUpdatedAt || new Date().toISOString(),
+        notes: cleanQuote.notes || "",
+        cost_total: cleanQuote.totals?.cost || 0,
+        margin_total: cleanQuote.totals?.margin || 0,
+        before_tax_total: cleanQuote.totals?.beforeTax || 0,
+        tax_total: cleanQuote.totals?.tax || 0,
+        grand_total: cleanQuote.totals?.total || 0,
       };
 
       const row = withError(
@@ -491,7 +506,7 @@
       );
 
       withError(await window.sb.from("quote_lines").delete().eq("quote_id", row.id), "Limpiar presupuesto");
-      const linePayloads = (savedQuote.lines || []).map((line, index) => ({
+      const linePayloads = (cleanQuote.lines || []).map((line, index) => ({
         quote_id: row.id,
         name: line.name,
         quantity: line.quantity || 0,
